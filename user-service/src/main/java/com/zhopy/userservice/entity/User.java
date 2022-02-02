@@ -1,29 +1,45 @@
 package com.zhopy.userservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@SQLDelete(sql = "UPDATE usuarios SET eliminado=true WHERE id_usuario=?")// Para implementar el soft delete
-@Where(clause = "eliminado = false")// filtra solo los que no esten eliminados
-@NoArgsConstructor // Genera el constructor vacio
+@Table(name = "usuarios")
+@SQLDelete(sql = "UPDATE usuarios SET eliminado=true WHERE id_usuario=?")
+@Where(clause = "eliminado = false")
+@Setter
+@Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class User {
     
     @Id
-    private String idUsuario;
-    
-    private String nombreUsuario;
-    private String correo;
-    private String direccion;
+    @Column(name = "id_usuario")
+    private String userId;
+    @Column(name = "nombre_usuario")
+    private String userName;
+    @Column(name = "correo")
+    private String email;
+    @Column(name = "direccion")
+    private String address;
+    @Column(name = "password")
     private String password;
-    private String telefono;
-    private int codigoRol;
-    private boolean eliminado;
+    @Column(name = "telefono")
+    private String phone;
+    @Column(name = "codigo_rol")
+    private int roleCode;
+    @JsonIgnore
+    @Column(name = "eliminado")
+    private boolean deleted;
 }

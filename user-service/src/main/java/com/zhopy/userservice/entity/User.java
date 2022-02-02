@@ -11,8 +11,7 @@ import javax.persistence.Id;
 
 @Entity
 @SQLDelete(sql = "UPDATE usuarios SET eliminado=true WHERE id_usuario=?")// Para implementar el soft delete
-@Where(clause = "eliminado = false")
-@Data // getters setters toString etc
+@Where(clause = "eliminado = false")// filtra solo los que no esten eliminados
 @NoArgsConstructor // Genera el constructor vacio
 @AllArgsConstructor
 public class User {

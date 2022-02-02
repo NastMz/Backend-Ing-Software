@@ -33,9 +33,7 @@ public class UserController {
 
     @PostMapping("/{userId}")
     public ResponseEntity<User> save(@RequestBody User user){ // ResponseEntity representa toda la respuesta HTTP: código de estado, encabezados y cuerpo
-        User user = userService.save(userId);
-        if (user == null)
-            return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(user);
+        User userNew = userService.save(user);
+        return ResponseEntity.ok(userNew);
     }
 }

@@ -1,65 +1,55 @@
 package com.zhopy.userservice.controller;
 
-import com.zhopy.userservice.dto.Message;
-import com.zhopy.userservice.entity.User;
-import com.zhopy.userservice.service.UserService;
+import com.zhopy.userservice.dto.UserRequest;
+import com.zhopy.userservice.service.interfaces.IUserService;
+import com.zhopy.userservice.utils.exeptions.ApiNotFound;
+import com.zhopy.userservice.utils.exeptions.ApiUnprocessableEntity;
+import com.zhopy.userservice.validator.UserValidatorImplement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private IUserService userService;
 
-    @GetMapping("/list")
-    public ResponseEntity<List<User>> getAll(){
-        List<User> userList = userService.getAll();
-        return new ResponseEntity(userList, HttpStatus.OK);
+    @Autowired
+    private UserValidatorImplement userValidator;
+
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> findAll(){
+        return ResponseEntity.ok(this.userService.findAll());
     }
 
-    @GetMapping("/detail/{userId}")
-    public ResponseEntity<User> getById(@PathVariable("userId") String userId){ // ResponseEntity representa toda la respuesta HTTP: código de estado, encabezados y cuerpo
-        if(!userService.existsById(userId))
-            return new ResponseEntity(new Message("no existe"), HttpStatus.NOT_FOUND);
-        User user = userService.getById(userId).get();
-        return new ResponseEntity(user, HttpStatus.OK);
+    @GetMapping(value="/detail/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> findByUserId(@PathVariable("userId") String userId) throws ApiNotFound {
+        this.userValidator.validatorById(userId);
+        return ResponseEntity.ok(this.userService.findByUserId(userId));
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody User user){
-        if(userService.existsById(user.getUserId()))
-            return new ResponseEntity(new Message("ese documento ya existe"), HttpStatus.BAD_REQUEST);
-        if(userService.existsByEmail(user.getEmail()))
-            return new ResponseEntity(new Message("ese email ya existe"), HttpStatus.BAD_REQUEST);
-
-        userService.save(user);
-        return new ResponseEntity(new Message("usuario creado"), HttpStatus.OK);
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> save(@RequestBody UserRequest userRequest) throws ApiUnprocessableEntity {
+        this.userValidator.validator(userRequest);
+        this.userService.save(userRequest);
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 
     @PutMapping("/update/{userId}")
-    public ResponseEntity<?> update(@PathVariable("userId")String userId, @RequestBody User user){
-        if(!userService.existsById(userId))
-            return new ResponseEntity(new Message("no existe"), HttpStatus.NOT_FOUND);
-        if(userService.existsByEmail(user.getEmail()) && !Objects.equals(userService.getById(user.getUserId()).get().getUserId(), userId))
-            return new ResponseEntity(new Message("ese correo ya existe"), HttpStatus.BAD_REQUEST);
-
-        userService.save(user);
-        return new ResponseEntity(new Message("usuario actualizado"), HttpStatus.OK);
+    public ResponseEntity<Object> update(@PathVariable("userId")String userId, @RequestBody UserRequest userRequest) throws ApiNotFound {
+        this.userValidator.validatorById(userId);
+        this.userService.update(userRequest, userId);
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<?> delete(@PathVariable("userId")String userId){
-        if(!userService.existsById(userId))
-            return new ResponseEntity(new Message("no existe"), HttpStatus.NOT_FOUND);
-        userService.delete(userId);
-        return new ResponseEntity(new Message("usuario eliminado"), HttpStatus.OK);
+    @DeleteMapping(value = "/delete/{userId}")
+    public ResponseEntity<Object> delete(@PathVariable("userId")String userId) throws ApiNotFound {
+        this.userValidator.validatorById(userId);
+        this.userService.delete(userId);
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 
 }

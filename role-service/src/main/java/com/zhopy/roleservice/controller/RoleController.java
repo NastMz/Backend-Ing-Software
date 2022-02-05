@@ -1,62 +1,55 @@
 package com.zhopy.roleservice.controller;
 
-import com.zhopy.roleservice.dto.Message;
-import com.zhopy.roleservice.entity.Role;
-import com.zhopy.roleservice.service.RoleService;
+import com.zhopy.roleservice.dto.RoleRequest;
+import com.zhopy.roleservice.service.interfaces.IRoleService;
+import com.zhopy.roleservice.utils.exeptions.ApiNotFound;
+import com.zhopy.roleservice.utils.exeptions.ApiUnprocessableEntity;
+import com.zhopy.roleservice.validator.RoleValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/role")
 public class RoleController {
 
     @Autowired
-    RoleService roleService;
+    private IRoleService roleService;
 
-    @GetMapping("/list")
-    public ResponseEntity<List<Role>> getAll(){
-        List<Role> roleList = roleService.getAll();
-        return new ResponseEntity(roleList, HttpStatus.OK);
+    @Autowired
+    private RoleValidator roleValidator;
+
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> findAll() {
+        return ResponseEntity.ok(this.roleService.findAll());
     }
 
-    @GetMapping("/detail/{roleCode}")
-    public ResponseEntity<Role> getById(@PathVariable("roleCode") Long roleCode){ // ResponseEntity representa toda la respuesta HTTP: código de estado, encabezados y cuerpo
-        if(!roleService.existsById(roleCode))
-            return new ResponseEntity(new Message("no existe"), HttpStatus.NOT_FOUND);
-        Role role = roleService.getById(roleCode).get();
-        return new ResponseEntity(role, HttpStatus.OK);
+    @GetMapping(value = "/detail/{roleCode}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> findByRoleCode(@PathVariable("roleCode") Long roleCode) throws ApiNotFound {
+        this.roleValidator.validatorById(roleCode);
+        return ResponseEntity.ok(this.roleService.findByRoleCode(roleCode));
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody Role role){
-        if(roleService.existsByName(role.getRoleName()))
-            return new ResponseEntity(new Message("ese nombre ya existe"), HttpStatus.BAD_REQUEST);
-
-        roleService.save(role);
-        return new ResponseEntity(new Message("rol creado"), HttpStatus.OK);
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> save(@RequestBody RoleRequest roleRequest) throws ApiUnprocessableEntity {
+        this.roleValidator.validator(roleRequest);
+        this.roleService.save(roleRequest);
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 
     @PutMapping("/update/{roleCode}")
-    public ResponseEntity<?> update(@PathVariable("roleCode")Long roleCode, @RequestBody Role role){
-        if(!roleService.existsById(roleCode))
-            return new ResponseEntity(new Message("no existe"), HttpStatus.NOT_FOUND);
-        if(roleService.existsByName(role.getRoleName()) && roleService.getByName(role.getRoleName()).get().getRoleCode() != roleCode)
-            return new ResponseEntity(new Message("ese nombre ya existe"), HttpStatus.BAD_REQUEST);
-
-        roleService.save(role);
-        return new ResponseEntity(new Message("rol actualizado"), HttpStatus.OK);
+    public ResponseEntity<Object> update(@PathVariable("roleCode") Long roleCode, @RequestBody RoleRequest roleRequest) throws ApiNotFound {
+        this.roleValidator.validatorById(roleCode);
+        this.roleService.update(roleRequest, roleCode);
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 
     @DeleteMapping("/delete/{roleCode}")
-    public ResponseEntity<?> delete(@PathVariable("roleCode")Long codeRole){
-        if(!roleService.existsById(codeRole))
-            return new ResponseEntity(new Message("no existe"), HttpStatus.NOT_FOUND);
-        roleService.delete(codeRole);
-        return new ResponseEntity(new Message("rol eliminado"), HttpStatus.OK);
+    public ResponseEntity<Object> delete(@PathVariable("roleCode") Long codeRole) throws ApiNotFound {
+        this.roleValidator.validatorById(codeRole);
+        this.roleService.delete(codeRole);
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 
 }

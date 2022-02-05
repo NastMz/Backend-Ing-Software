@@ -1,28 +1,18 @@
 package com.zhopy.userservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
+@Data
 @Entity
 @Table(name = "usuarios")
 @SQLDelete(sql = "UPDATE usuarios SET eliminado=true WHERE id_usuario=?")
 @Where(clause = "eliminado = false")
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class User {
+public class User implements Serializable {
     
     @Id
     @Column(name = "id_usuario")
@@ -38,8 +28,12 @@ public class User {
     @Column(name = "telefono")
     private String phone;
     @Column(name = "codigo_rol")
-    private int roleCode;
-    @JsonIgnore
+    private Long roleCode;
     @Column(name = "eliminado")
     private boolean deleted;
+
+    @PrePersist
+    public void prePersist() {
+        this.deleted = false;
+    }
 }

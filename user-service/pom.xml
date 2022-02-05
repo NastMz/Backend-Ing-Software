@@ -49,12 +49,18 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.12.0</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>2.4.5</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.zhopy</groupId>
+			<artifactId>role-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

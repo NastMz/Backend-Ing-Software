@@ -85,20 +85,20 @@ Para asignarle un puerto especifico a los servicios, se debe hacer en el archivo
 
 Los parametros son:
 
-
-      server.port=8000
-      spring.application.name=user-service
-
+```properties
+ server.port=8000
+ spring.application.name=user-service
+```
 
 En este archivo tambien se encuentran los parametros de la base de datos.
 
-
-
-     spring.datasource.url=jdbc:mysql://localhost/zhopy?useSSL=false
-     spring.datasource.dbname=zhopy
-     spring.datasource.username=______
-     spring.datasource.password=_____
-     spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```properties
+spring.datasource.url=jdbc:mysql://localhost/zhopy?useSSL=false
+spring.datasource.dbname=zhopy
+spring.datasource.username=______
+spring.datasource.password=_____
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```
 
 # GATEWAY
 
@@ -110,15 +110,19 @@ En este archivo que esta en la ruta `gateway-service\src\main\resources` se agre
 
 La sintaxis es la siguiente:
 
-
-	internal.lb.uri: http://localhost
-      routes:
-        - id: user-service
-          uri: ${internal.lb.uri}:8000
-          predicates:
-            - Path=/api/user/**
-          filters:
-            - AuthFilter
+```yaml
+internal.lb.uri: http://localhost
+spring:
+ cloud:
+  gateway:
+   routes:
+      - id: user-service
+       uri: ${internal.lb.uri}:8000
+       predicates:
+        - Path=/api/user/**
+       filters:
+        - AuthFilter
+```
 
 
 La variable `internal.lb.uri` es la direccion global por donde llegan las peticiones.
@@ -137,18 +141,23 @@ Ademas el atributo `routes` se divide asi:
 
 Para agregar un nuevo servicio, se duplica la seccion `id` y se pone debajo de la anterior con los nuevos parametros:
 
- 	routes:
-        - id: user-service
-          uri: ${internal.lb.uri}:9000
-          predicates:
-            - Path=/api/user/**
-          filters:
-            - AuthFilter
-        - id: role-service 
-          uri: ${internal.lb.uri}:8001
-          predicates:
-            - Path=/api/role/**
-          filters:
-            - AuthFilter
-    
+```yaml
+internal.lb.uri: http://localhost
+spring:
+  cloud:
+    gateway:
+      routes:
+          - id: user-service
+            uri: ${internal.lb.uri}:9000
+            predicates:
+              - Path=/api/user/**
+            filters:
+              - AuthFilter
+          - id: role-service 
+            uri: ${internal.lb.uri}:8001
+            predicates:
+              - Path=/api/role/**
+            filters:
+              - AuthFilter
+```
 

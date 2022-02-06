@@ -25,7 +25,7 @@
 
 > `/oauth/client_credential/accesstoken` *Obtener un token*
  
-> > `/oauth/getPayload?token=*token*` *Obtener informacion de un token*
+>  `/oauth/getPayload?token=*token*` *Obtener informacion de un token*
 
 ## Para generar un token
 
@@ -78,3 +78,77 @@ async function cargarJson() {
 cargarJson();
 
 ```
+
+# PUERTOS DE LOS SERVICIOS
+
+Para asignarle un puerto especifico a los servicios, se debe hacer en el archivo `aplication.properties` que se encuentra en la ruta `\src\main\resources` de cada servicio.
+
+Los parametros son:
+
+
+      server.port=8000
+      spring.application.name=user-service
+
+
+En este archivo tambien se encuentran los parametros de la base de datos.
+
+
+
+     spring.datasource.url=jdbc:mysql://localhost/zhopy?useSSL=false
+     spring.datasource.dbname=zhopy
+     spring.datasource.username=______
+     spring.datasource.password=_____
+     spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# GATEWAY
+
+Este servicio hace el redireccionamiento a los demas servicios, esta configurado para recibir las request por el puerto **8080** y redireccionarlas a su respectivo servicio
+
+### Archivo `aplication.yml`
+
+En este archivo que esta en la ruta `gateway-service\src\main\resources` se agregan los diversos servicios para que se redireccionen.
+
+La sintaxis es la siguiente:
+
+
+	internal.lb.uri: http://localhost
+      routes:
+        - id: user-service
+          uri: ${internal.lb.uri}:8000
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - AuthFilter
+
+
+La variable `internal.lb.uri` es la direccion global por donde llegan las peticiones.
+
+Ademas el atributo `routes` se divide asi:
+
+- `Id` Es el nombre del servicio
+
+- `uri` es la direccion por la que ese servicio recibe las peticiones que es el mismo global, pero con el puerto asignado al mismo
+
+- `Path` Es la ruta que se asigno para acceder al los metodos del controlador
+
+- `filters` Es la propiedad que hace que las peticiones a ese servicio deban llevar el token en la cabecera, si no esta entonces se ueden haacer peticiones sin token
+
+## Agregar servicios al gateway
+
+Para agregar un nuevo servicio, se duplica la seccion `id` y se pone debajo de la anterior con los nuevos parametros:
+
+ 	routes:
+        - id: user-service
+          uri: ${internal.lb.uri}:9000
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - AuthFilter
+        - id: role-service 
+          uri: ${internal.lb.uri}:8001
+          predicates:
+            - Path=/api/role/**
+          filters:
+            - AuthFilter
+    
+

@@ -1,0 +1,34 @@
+server:
+    port: 8080
+    error:
+        include-stacktrace: never
+
+internal.lb.uri: http://localhost
+spring:
+    cloud:
+        gateway:
+            default-filters:
+                - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            globalcors:
+                corsConfigurations:
+                    '[/**]':
+                        allowedOrigins: "*"
+                        allowedMethods: "*"
+                        allowedHeaders: "*"
+            routes:
+                - id: user-service
+                  uri: ${internal.lb.uri}:8000
+                  predicates:
+                    - Path=/api/user/**
+                  filters:
+                    - AuthFilter
+                - id: role-service
+                  uri: ${internal.lb.uri}:8001
+                  predicates:
+                    - Path=/api/role/**
+                  filters:
+                    - AuthFilter
+                - id: auth-service
+                  uri: ${internal.lb.uri}:8090
+                  predicates:
+                    - Path=/oauth/**

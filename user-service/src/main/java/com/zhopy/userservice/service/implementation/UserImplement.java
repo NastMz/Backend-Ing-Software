@@ -29,8 +29,8 @@ public class UserImplement implements IUserService {
         Iterable<User> users = this.userRepository.findAll();
 
         for (User user : users){
-            UserDTO rolesDTO = MapperHelper.modelMapper().map(user, UserDTO.class);
-            dto.add(rolesDTO);
+            UserDTO userDTO = MapperHelper.modelMapper().map(user, UserDTO.class);
+            dto.add(userDTO);
         }
 
         return dto;
@@ -52,6 +52,11 @@ public class UserImplement implements IUserService {
             return null;
         }
         return MapperHelper.modelMapper().map(user, UserDTO.class);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).get();
     }
 
     @Override

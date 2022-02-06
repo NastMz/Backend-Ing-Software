@@ -17,13 +17,15 @@
 | `/api/*/delete/{id}`  | DELETE  |  
 | `/api/*/update/{id}`  | PUT     |
 
-> `*` Palabra antes de -service
+> `*` *Palabra antes de -service*
 
 # TOKEN
 
-> `/oauth/validate?token=*token*` Verificar si un token ya expiro
+> `/oauth/validate?token=*token*` *Verificar si un token ya expiro*
 
-> `/oauth/client_credential/accesstoken` Obtener un token
+> `/oauth/client_credential/accesstoken` *Obtener un token*
+ 
+> > `/oauth/getPayload?token=*token*` *Obtener informacion de un token*
 
 ## Para generar un token
 

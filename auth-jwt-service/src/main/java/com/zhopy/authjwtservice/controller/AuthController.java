@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @GetMapping(path = "/validate")
-    public ResponseEntity<Object> validate(@RequestParam String token) throws ApiUnauthorized {
+    public ResponseEntity<Object> validate(@RequestParam String token){
         boolean validate = !jwtIO.validateToke(token);
 
         if (!validate){
@@ -43,6 +43,19 @@ public class AuthController {
         tokenDTO.setToken(token);
 
         return ResponseEntity.ok(tokenDTO);
+    }
+
+    @GetMapping(path = "/getPayload")
+    public ResponseEntity<Object> getPayload(@RequestParam String token){
+        boolean validate = !jwtIO.validateToke(token);
+
+        if (!validate){
+            return ResponseEntity.badRequest().build();
+        }
+
+        String payload = jwtIO.getPayload(token);
+
+        return ResponseEntity.ok(payload);
     }
 
 

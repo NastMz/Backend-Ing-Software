@@ -14,7 +14,7 @@ jms:
             secret: "secret"
             expires-in: 3600 # seconds
         exclude:
-            path: "/oauth/validate,/web,/cualquiera"
+            path: "/oauth/validate,/api/user/save,/oauth/getPayload"
 
 spring:
   datasource:

@@ -12,4 +12,5 @@ public interface RoleRepository extends CrudRepository<Role, Long> {
     @Transactional(readOnly = true)
     Optional<Role> findByRoleName(String roleName);
     boolean existsByRoleName(String roleName);
+    boolean existsByRoleCode(Long roleCode);
 }

@@ -8,13 +8,14 @@ import com.zhopy.roleservice.service.interfaces.IRoleService;
 import com.zhopy.roleservice.utils.helpers.MapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
-public class RoleImplementation implements IRoleService {
+public class RoleImplement implements IRoleService {
 
     @Autowired
     private RoleRepository roleRepository;
@@ -57,8 +58,27 @@ public class RoleImplementation implements IRoleService {
     }
 
     @Override
+    public void update(RoleRequest roleRequest, Long roleCode) {
+        Optional<Role> roleSearch = this.roleRepository.findById(roleCode);
+        Role role = roleSearch.get();
+        role.setRoleName(roleRequest.getRoleName());
+        this.roleRepository.save(role);
+
+    }
+
+    @Override
     public void delete(Long roleCode) {
         roleRepository.deleteById(roleCode);
+    }
+
+    @Override
+    public boolean existsByRoleCode(Long roleCode) {
+        return roleRepository.existsByRoleCode(roleCode);
+    }
+
+    @Override
+    public boolean existsByRoleName(String roleName) {
+        return roleRepository.existsByRoleName(roleName);
     }
 
 }

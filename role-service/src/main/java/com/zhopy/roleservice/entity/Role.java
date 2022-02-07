@@ -1,6 +1,5 @@
 package com.zhopy.roleservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -27,4 +26,5 @@ public class Role implements Serializable {
     public void prePersist() {
         this.deleted = false;
     }
+
 }

@@ -8,11 +8,9 @@
  + [Archivo `aplication.yml`](#archivo--aplicationyml-)
  * [Agregar servicios al gateway](#agregar-servicios-al-gateway)
 
-------------------------------------------------------------------------------------
-
-
 # PUERTOS
 
+----
 | Servicio                | Puerto  |
 |-------------------------|---------|
 | `user-service port`     | `8000`  |
@@ -22,6 +20,7 @@
 
 # URIs
 
+----
 | URI                   | Metodo  |
 |-----------------------|---------|
 | `/api/*/list`         | GET     |
@@ -32,8 +31,10 @@
 
 > `*` *Palabra antes de -service*
 
+
 # TOKEN
 
+----
 > `/oauth/validate?token=*token*` *Verificar si un token ya expiro*
 
 > `/oauth/client_credential/accesstoken` *Obtener un token*
@@ -94,6 +95,8 @@ cargarJson();
 
 # PUERTOS DE LOS SERVICIOS
 
+----
+
 Para asignarle un puerto especifico a los servicios, se debe hacer en el archivo `aplication.properties` que se encuentra en la ruta `\src\main\resources` de cada servicio.
 
 Los parametros son:
@@ -115,7 +118,10 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 # GATEWAY
 
+----
+
 Este servicio hace el redireccionamiento a los demas servicios, esta configurado para recibir las request por el puerto **8080** y redireccionarlas a su respectivo servicio
+
 
 ### Archivo `aplication.yml`
 
@@ -149,6 +155,7 @@ Ademas el atributo `routes` se divide asi:
 - `Path` Es la ruta que se asigno para acceder al los metodos del controlador
 
 - `filters` Es la propiedad que hace que las peticiones a ese servicio deban llevar el token en la cabecera, si no esta entonces se ueden haacer peticiones sin token
+
 
 ## Agregar servicios al gateway
 

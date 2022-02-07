@@ -4,8 +4,9 @@ import com.zhopy.userservice.dto.UserRequest;
 import com.zhopy.userservice.service.interfaces.IUserService;
 import com.zhopy.userservice.utils.exceptions.ApiNotFound;
 import com.zhopy.userservice.utils.exceptions.ApiUnprocessableEntity;
-import com.zhopy.userservice.validator.UserValidatorImplement;
+import com.zhopy.userservice.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class UserController {
     private IUserService userService;
 
     @Autowired
-    private UserValidatorImplement userValidator;
+    private UserValidator userValidator;
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAll(){

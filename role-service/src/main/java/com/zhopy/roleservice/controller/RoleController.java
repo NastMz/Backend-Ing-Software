@@ -6,6 +6,7 @@ import com.zhopy.roleservice.utils.exeptions.ApiNotFound;
 import com.zhopy.roleservice.utils.exeptions.ApiUnprocessableEntity;
 import com.zhopy.roleservice.validator.RoleValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

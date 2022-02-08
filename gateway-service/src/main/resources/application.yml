@@ -36,3 +36,9 @@ spring:
                   uri: ${internal.lb.uri}:8090
                   predicates:
                     - Path=/oauth/**
+                - id: city-service
+                  uri: ${internal.lb.uri}:8002
+                  predicates:
+                    - Path=/api/city/**
+                  filters:
+                    - AuthFilter

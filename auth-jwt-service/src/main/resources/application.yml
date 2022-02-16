@@ -12,7 +12,7 @@ jms:
             auth:
                 path: "/oauth/client_credential/accesstoken"
             secret: "secret"
-            expires-in: 3600 # seconds
+            expires-in: 43200 # tiempo de expiración serial (12 horas) tiempo en seg
         exclude:
             path: "/oauth/validate,/api/user/save,/oauth/getPayload"
 

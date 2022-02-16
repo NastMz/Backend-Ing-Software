@@ -26,7 +26,7 @@ public class JwtIO {
     public String generateToken(Object src) {
         String subject = GsonUtils.serialize(src);
 
-        // Construir un HMAC signer usando SHA-256
+        // Construir un HMAC signer usando SHA-384
         Signer signer = HMACSigner.newSHA384Signer(SECRET);
 
         TimeZone tz = TimeZone.getTimeZone(TIMEZONE);

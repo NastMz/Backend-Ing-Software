@@ -16,13 +16,14 @@
 
 ----
 
-| Servicio                | Puerto |
-|-------------------------|--------|
-| `user-service port`     | `8000` |
-| `role-service port`     | `8001` |
-| `city-service port`     | `8002` |
-| `auth-jwt-service port` | `8090` |
-| `gateway-service port`  | `8080` |
+| Servicio           | Puerto |
+|--------------------|--------|
+| `user-service`     | `8000` |
+| `role-service`     | `8001` |
+| `city-service`     | `8002` |
+| `shoes-service`    | `8002` |
+| `auth-jwt-service` | `8090` |
+| `gateway-service`  | `8080` |
 
 # URIs
 
@@ -163,7 +164,7 @@ Ademas el atributo `routes` se divide asi:
 - `Path` Es la ruta que se asigno para acceder al los metodos del controlador
 
 - `filters` Es la propiedad que hace que las peticiones a ese servicio deban llevar el token en la cabecera, si no esta
-  entonces se ueden haacer peticiones sin token
+  entonces se pueden hacer peticiones sin token
 
 ## Agregar servicios al gateway
 
@@ -181,6 +182,7 @@ spring:
                         - Path=/api/user/**
                     filters:
                         - AuthFilter
+                # Nuevo servicio agregado
                 -   id: role-service
                     uri: ${internal.lb.uri}:8001
                     predicates:

@@ -2,6 +2,7 @@ server:
     port: 8080
     error:
         include-stacktrace: never
+        include-message: always
 
 internal.lb.uri: http://localhost
 spring:
@@ -40,5 +41,11 @@ spring:
                   uri: ${internal.lb.uri}:8002
                   predicates:
                     - Path=/api/city/**
+                  filters:
+                    - AuthFilter
+                - id: shoes-service
+                  uri: ${internal.lb.uri}:8003
+                  predicates:
+                    - Path=/api/shoes/**
                   filters:
                     - AuthFilter

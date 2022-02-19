@@ -9,11 +9,18 @@ import java.util.List;
 @Service
 public interface ICityService {
     List<CityDTO> findAll();
+
     CityDTO findByCityCode(Long cityCode);
+
     CityDTO findByCityName(String cityName);
+
     void save(CityRequest cityRequest);
+
     void update(CityRequest cityRequest, Long cityCode);
+
     void delete(Long cityCode);
+
     boolean existsByCityCode(Long cityCode);
+
     boolean existsByCityName(String cityName);
 }

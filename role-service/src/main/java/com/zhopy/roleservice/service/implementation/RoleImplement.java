@@ -8,7 +8,6 @@ import com.zhopy.roleservice.service.interfaces.IRoleService;
 import com.zhopy.roleservice.utils.helpers.MapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class RoleImplement implements IRoleService {
         List<RoleDTO> dto = new ArrayList<>();
         Iterable<Role> roles = this.roleRepository.findAll();
 
-        for (Role role : roles){
+        for (Role role : roles) {
             RoleDTO rolesDTO = MapperHelper.modelMapper().map(role, RoleDTO.class);
             dto.add(rolesDTO);
         }
@@ -36,7 +35,7 @@ public class RoleImplement implements IRoleService {
     @Override
     public RoleDTO findByRoleCode(Long roleCode) {
         Optional<Role> role = this.roleRepository.findById(roleCode);
-        if (!role.isPresent()){
+        if (!role.isPresent()) {
             return null;
         }
         return MapperHelper.modelMapper().map(role.get(), RoleDTO.class);
@@ -45,7 +44,7 @@ public class RoleImplement implements IRoleService {
     @Override
     public RoleDTO findByRoleName(String roleName) {
         Optional<Role> role = this.roleRepository.findByRoleName(roleName);
-        if (role.isPresent()){
+        if (role.isPresent()) {
             return null;
         }
         return MapperHelper.modelMapper().map(role, RoleDTO.class);

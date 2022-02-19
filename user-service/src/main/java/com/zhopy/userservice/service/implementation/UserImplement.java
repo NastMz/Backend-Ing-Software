@@ -28,7 +28,7 @@ public class UserImplement implements IUserService {
         List<UserDTO> dto = new ArrayList<>();
         Iterable<User> users = this.userRepository.findAll();
 
-        for (User user : users){
+        for (User user : users) {
             UserDTO userDTO = MapperHelper.modelMapper().map(user, UserDTO.class);
             dto.add(userDTO);
         }
@@ -39,7 +39,7 @@ public class UserImplement implements IUserService {
     @Override
     public UserDTO findByUserId(String userId) {
         Optional<User> user = this.userRepository.findById(userId);
-        if (!user.isPresent()){
+        if (!user.isPresent()) {
             return null;
         }
         return MapperHelper.modelMapper().map(user.get(), UserDTO.class);
@@ -48,7 +48,7 @@ public class UserImplement implements IUserService {
     @Override
     public UserDTO findByEmail(String email) {
         Optional<User> user = this.userRepository.findByEmail(email);
-        if (user.isPresent()){
+        if (user.isPresent()) {
             return null;
         }
         return MapperHelper.modelMapper().map(user, UserDTO.class);
@@ -77,7 +77,7 @@ public class UserImplement implements IUserService {
         User user = MapperHelper.modelMapper().map(userRequest, User.class);
         if (StringUtils.hasText(userRequest.getPassword())) {
             user.setPassword(BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()));
-        }else{
+        } else {
             user.setPassword(userSearch.get().getPassword());
         }
 

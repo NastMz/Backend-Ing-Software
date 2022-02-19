@@ -21,7 +21,7 @@
 | `user-service`     | `8000` |
 | `role-service`     | `8001` |
 | `city-service`     | `8002` |
-| `shoes-service`    | `8002` |
+| `shoes-service`    | `8003` |
 | `auth-jwt-service` | `8090` |
 | `gateway-service`  | `8080` |
 

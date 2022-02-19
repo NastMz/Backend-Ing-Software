@@ -1,8 +1,8 @@
 package com.zhopy.authjwtservice.services.implementation;
 
-import com.zhopy.authjwtservice.services.interfaces.IUserService;
 import com.zhopy.authjwtservice.entity.User;
 import com.zhopy.authjwtservice.repository.UserRepository;
+import com.zhopy.authjwtservice.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

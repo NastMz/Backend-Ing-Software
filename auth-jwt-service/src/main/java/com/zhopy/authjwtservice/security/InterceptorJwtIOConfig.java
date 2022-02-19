@@ -17,7 +17,7 @@ public class InterceptorJwtIOConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        if (securityEnabled){
+        if (securityEnabled) {
             registry.addInterceptor(interceptorJwtIO);
         }
     }

@@ -33,10 +33,10 @@ public class AuthController {
     }
 
     @GetMapping(path = "/validate")
-    public ResponseEntity<Object> validate(@RequestParam String token){
+    public ResponseEntity<Object> validate(@RequestParam String token) {
         boolean validate = !jwtIO.validateToke(token);
 
-        if (!validate){
+        if (!validate) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -48,10 +48,10 @@ public class AuthController {
     }
 
     @GetMapping(path = "/getPayload")
-    public ResponseEntity<Object> getPayload(@RequestParam String token){
+    public ResponseEntity<Object> getPayload(@RequestParam String token) {
         boolean validate = !jwtIO.validateToke(token);
 
-        if (!validate){
+        if (!validate) {
             return ResponseEntity.badRequest().build();
         }
 

@@ -16,17 +16,13 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     @Autowired
-    private JwtIO jwtIO;
-
-    @Autowired
-    private DateUtils dateUtils;
-
-    @Autowired
     UserValidator userValidator;
-
     @Autowired
     IUserService userService;
-
+    @Autowired
+    private JwtIO jwtIO;
+    @Autowired
+    private DateUtils dateUtils;
     @Value("${jms.jwt.token.expires-in}")
     private int EXPIRES_IN;
 

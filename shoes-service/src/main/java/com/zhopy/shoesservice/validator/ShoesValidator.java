@@ -11,4 +11,9 @@ public interface ShoesValidator {
     void validator(ShoesRequest shoesRequest) throws ApiUnprocessableEntity;
 
     void validatorById(String shoeCode) throws ApiNotFound;
+
+    void validatorByIdRequest(String urlCode, String shoeCode) throws ApiNotFound, ApiUnprocessableEntity;
+
+    void validatorUpdate(ShoesRequest request) throws ApiUnprocessableEntity;
+
 }

@@ -24,7 +24,7 @@ public class CityImplement implements ICityService {
         List<CityDTO> dto = new ArrayList<>();
         Iterable<City> cities = this.cityRepository.findAll();
 
-        for (City city : cities){
+        for (City city : cities) {
             CityDTO cityDTO = MapperHelper.modelMapper().map(city, CityDTO.class);
             dto.add(cityDTO);
         }
@@ -35,7 +35,7 @@ public class CityImplement implements ICityService {
     @Override
     public CityDTO findByCityCode(Long cityCode) {
         Optional<City> city = this.cityRepository.findById(cityCode);
-        if (!city.isPresent()){
+        if (!city.isPresent()) {
             return null;
         }
         return MapperHelper.modelMapper().map(city.get(), CityDTO.class);
@@ -44,7 +44,7 @@ public class CityImplement implements ICityService {
     @Override
     public CityDTO findByCityName(String cityName) {
         Optional<City> city = this.cityRepository.findByCityName(cityName);
-        if (city.isPresent()){
+        if (city.isPresent()) {
             return null;
         }
         return MapperHelper.modelMapper().map(city, CityDTO.class);

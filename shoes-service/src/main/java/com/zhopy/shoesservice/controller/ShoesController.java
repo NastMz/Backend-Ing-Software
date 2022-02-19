@@ -7,6 +7,9 @@ import com.zhopy.shoesservice.service.interfaces.IUploadFileService;
 import com.zhopy.shoesservice.utils.exeptions.ApiNotFound;
 import com.zhopy.shoesservice.utils.exeptions.ApiUnprocessableEntity;
 import com.zhopy.shoesservice.validator.ShoesValidator;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@OpenAPIDefinition(info = @Info(title = "Zhopy", description = "shoes-service controller", version = "v1", license = @License(name = "", url = "")))
 @RestController
 @RequestMapping("/api/shoes")
 public class ShoesController {
@@ -47,12 +51,13 @@ public class ShoesController {
         shoesRequest.setImage(imageName);
 
         this.shoeService.save(shoesRequest);
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok("Los zapatos se guardaron correctamente");
     }
 
     @PutMapping("/update/{shoeCode}")
-    public ResponseEntity<Object> update(@PathVariable("shoeCode") String shoeCode, @RequestBody ShoesRequest shoesRequest, @RequestParam("image") MultipartFile file) throws ApiNotFound, IOException {
-        this.shoesValidator.validatorById(shoeCode);
+    public ResponseEntity<Object> update(@PathVariable("shoeCode") String shoeCode, @RequestBody ShoesRequest shoesRequest, @RequestParam("image") MultipartFile file) throws ApiNotFound, IOException, ApiUnprocessableEntity {
+        this.shoesValidator.validatorByIdRequest(shoeCode, shoesRequest.getShoeCode());
+        this.shoesValidator.validatorUpdate(shoesRequest);
 
         ShoesDTO shoe = this.shoeService.findByShoeCode(shoeCode);
         if (file.isEmpty()) {
@@ -66,7 +71,7 @@ public class ShoesController {
         }
 
         this.shoeService.update(shoesRequest, shoeCode);
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok("Los zapatos se actualizaron correctamente");
     }
 
     @DeleteMapping("/delete/{shoeCode}")
@@ -79,7 +84,7 @@ public class ShoesController {
         }
 
         this.shoeService.delete(shoeCode);
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok("Los zapatos se eliminaron correctamente");
     }
 
 }

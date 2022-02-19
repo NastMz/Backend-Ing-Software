@@ -13,7 +13,7 @@ import java.io.Serializable;
 @SQLDelete(sql = "UPDATE usuarios SET eliminado=true WHERE id_usuario=?")
 @Where(clause = "eliminado = false")
 public class User implements Serializable {
-    
+
     @Id
     @Column(name = "id_usuario")
     private String userId;

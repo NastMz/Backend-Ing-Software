@@ -1,6 +1,6 @@
 package com.zhopy.userservice.repository;
 
-import com.zhopy.userservice.entity.User;
+import com.zhopy.userservice.entity.Role;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, String> {
+public interface RoleRepository extends CrudRepository<Role, Long> {
     @Transactional(readOnly = true)
-    Optional<User> findByEmail(String email);
+    Optional<Role> findByRoleName(String roleName);
 
-    boolean existsByEmail(String email);
+    boolean existsByRoleName(String roleName);
+
+    boolean existsByRoleCode(Long roleCode);
 }

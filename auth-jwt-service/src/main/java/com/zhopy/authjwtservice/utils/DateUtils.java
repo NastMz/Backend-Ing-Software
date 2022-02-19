@@ -31,7 +31,7 @@ public class DateUtils {
 
         try {
             strNow = simpleDateFormat().parse(strDate);
-        }catch (ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 

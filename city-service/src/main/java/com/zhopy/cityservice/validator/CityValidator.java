@@ -9,5 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CityValidator {
     void validator(CityRequest cityRequest) throws ApiUnprocessableEntity;
+
     void validatorById(Long cityCode) throws ApiNotFound;
+
+    void validatorUpdate(CityRequest request) throws ApiUnprocessableEntity;
+
+    void validatorByIdRequest(Long urlCode, Long roleCode) throws ApiNotFound, ApiUnprocessableEntity;
 }

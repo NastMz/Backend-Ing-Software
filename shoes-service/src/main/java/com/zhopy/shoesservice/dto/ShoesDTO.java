@@ -12,6 +12,6 @@ public class ShoesDTO implements Serializable {
     private String stock;
     private String description;
     private String image;
-    private String categoryCode;
-    private String supplierNit;
+    private Long categoryCode;
+    private Long supplierNit;
 }

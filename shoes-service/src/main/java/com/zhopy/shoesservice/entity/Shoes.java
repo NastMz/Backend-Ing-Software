@@ -27,9 +27,9 @@ public class Shoes implements Serializable {
     @Column(name = "imagen")
     private String image;
     @Column(name = "codigo_categoria")
-    private String categoryCode;
+    private Long categoryCode;
     @Column(name = "nit_proveedor")
-    private String supplierNit;
+    private Long supplierNit;
     @Column(name = "eliminado")
     private boolean deleted;
 

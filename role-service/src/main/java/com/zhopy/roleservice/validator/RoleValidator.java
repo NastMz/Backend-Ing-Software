@@ -9,5 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public interface RoleValidator {
     void validator(RoleRequest roleRequest) throws ApiUnprocessableEntity;
+
     void validatorById(Long roleCode) throws ApiNotFound;
+
+    void validatorUpdate(RoleRequest request) throws ApiUnprocessableEntity;
+
+    void validatorByIdRequest(Long urlCode, Long roleCode) throws ApiNotFound, ApiUnprocessableEntity;
 }

@@ -60,6 +60,6 @@ public class JwtIO {
 
     private JWT jwt(String encodedJWT) {
         Verifier verifier = HMACVerifier.newVerifier(SECRET);
-        return JWT.getDecoder().decode(encodedJWT.replaceAll(" ", ""), verifier);
+        return JWT.getDecoder().decode(encodedJWT.replace(" ", ""), verifier);
     }
 }

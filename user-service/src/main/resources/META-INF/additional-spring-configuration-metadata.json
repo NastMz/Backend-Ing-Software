@@ -4,5 +4,6 @@
       "name": "spring.datasource.dbname",
       "type": "java.lang.String",
       "description": "Description for spring.datasource.dbname."
-  }
-] }
+    }
+  ]
+}

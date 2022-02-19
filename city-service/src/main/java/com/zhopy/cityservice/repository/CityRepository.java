@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface CityRepository extends CrudRepository<City, Long> {
     @Transactional(readOnly = true)
     Optional<City> findByCityName(String cityName);
+
     boolean existsByCityName(String cityName);
+
     boolean existsByCityCode(Long cityCode);
 }

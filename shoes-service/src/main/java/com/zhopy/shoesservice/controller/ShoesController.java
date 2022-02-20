@@ -10,17 +10,23 @@ import com.zhopy.shoesservice.validator.ShoesValidator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 @OpenAPIDefinition(info = @Info(title = "Zhopy", description = "shoes-service controller", version = "v1", license = @License(name = "", url = "")))
 @RestController
 @RequestMapping("/api/shoes")
+@CrossOrigin(origins = "*")
 public class ShoesController {
 
     @Autowired
@@ -32,22 +38,29 @@ public class ShoesController {
     @Autowired
     private ShoesValidator shoesValidator;
 
-    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findAll() {
-        return ResponseEntity.ok(this.shoeService.findAll());
+    @GetMapping(value = "/list", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Object> findAll() throws IOException {
+        List<ShoesDTO> shoes = this.shoeService.findAll();
+        for (ShoesDTO shoe : shoes) {
+            shoe.setImageBytes(this.uploadService.getImage(shoe.getImage()));
+        }
+        return ResponseEntity.ok(shoes);
     }
 
-    @GetMapping(value = "/detail/{shoeCode}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findByShoeCode(@PathVariable("shoeCode") String shoeCode) throws ApiNotFound {
+    @GetMapping(value = "/detail/{shoeCode}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Object> findByShoeCode(@PathVariable("shoeCode") String shoeCode) throws ApiNotFound, IOException {
         this.shoesValidator.validatorById(shoeCode);
-        return ResponseEntity.ok(this.shoeService.findByShoeCode(shoeCode));
+        ShoesDTO shoe = this.shoeService.findByShoeCode(shoeCode);
+        byte[] image = this.uploadService.getImage(shoe.getImage());
+        shoe.setImageBytes(image);
+        return ResponseEntity.ok(shoe);
     }
 
-    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> save(@RequestBody ShoesRequest shoesRequest, @RequestParam("image") MultipartFile file) throws ApiUnprocessableEntity, IOException {
+    @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Object> save(@RequestPart ShoesRequest shoesRequest, @RequestPart(required = false) MultipartFile image) throws ApiUnprocessableEntity, IOException {
         this.shoesValidator.validator(shoesRequest);
 
-        String imageName = this.uploadService.saveImage(file);
+        String imageName = this.uploadService.saveImage(image);
         shoesRequest.setImage(imageName);
 
         this.shoeService.save(shoesRequest);
@@ -85,6 +98,15 @@ public class ShoesController {
 
         this.shoeService.delete(shoeCode);
         return ResponseEntity.ok("Los zapatos se eliminaron correctamente");
+    }
+
+    @GetMapping(value = "/getImage/{name}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public @ResponseBody
+    byte[] getImageWithMediaType(@PathVariable String name) throws IOException {
+        String route = "shoes-service//images//";
+        File file = new File(route + name);
+        InputStream in = new FileInputStream(file);
+        return IOUtils.toByteArray(in);
     }
 
 }

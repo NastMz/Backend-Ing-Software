@@ -1,16 +1,15 @@
 - [PUERTOS](#puertos)
 - [URIs](#uris)
 - [TOKEN](#token)
-
-* [Para generar un token](#para-generar-un-token)
-* [Para hacer peticiones](#para-hacer-peticiones)
-
+    * [Para generar un token](#para-generar-un-token)
+    * [Para hacer peticiones](#para-hacer-peticiones)
 - [PUERTOS DE LOS SERVICIOS](#puertos-de-los-servicios)
 - [GATEWAY](#gateway)
-
-+ [Archivo `aplication.yml`](#archivo--aplicationyml-)
-
-* [Agregar servicios al gateway](#agregar-servicios-al-gateway)
+    * [Archivo `aplication.yml`](#archivo--aplicationyml-)
+    * [Agregar servicios al gateway](#agregar-servicios-al-gateway)
+- [IMAGENES ZAPATOS](#imagenes-zapatos)
+    * [Para subir una imagen](#para-subir-una-imagen)
+    * [Para mostrar una imagen](#para-mostrar-una-imagen)
 
 # PUERTOS
 
@@ -191,3 +190,284 @@ spring:
                         - AuthFilter
 ```
 
+# IMAGENES ZAPATOS
+
+----
+
+Ejemplos de como usar el servicio, estan hechos en bootstrap y javascript, además estan enviando directamente la
+peticion al servicio (cuando se implemente, ahi que mandarlo al gateway con el token). Las peticiones tienen que llevar
+la misma estructura de los ejemplos ya que si no fallan.
+
+## Para subir una imagen
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- Bootstrap CSS -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+            crossorigin="anonymous"
+    />
+
+    <title>Test Subir Imagenes</title>
+</head>
+<body>
+<div class="container-sm">
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="shoeCode" class="form-label">Codigo</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="shoeCode"
+                    name="shoeCode"
+                    value="ZP1"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="shoeName" class="form-label">Nombre</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="shoeName"
+                    name="shoeName"
+                    value="asdasd"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Precio</label>
+            <input
+                    type="number"
+                    class="form-control"
+                    id="price"
+                    name="price"
+                    value="2000"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">Stock</label>
+            <input
+                    type="number"
+                    class="form-control"
+                    id="stock"
+                    name="stock"
+                    value="15"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="categoryCode" class="form-label">Categoria</label>
+            <input
+                    type="number"
+                    class="form-control"
+                    id="categoryCode"
+                    name="categoryCode"
+                    value="3"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="supplierNit" class="form-label">Proveedor</label>
+            <input
+                    type="number"
+                    class="form-control"
+                    id="supplierNit"
+                    name="supplierNit"
+                    value="1784939034"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Descripcion</label>
+            <textarea
+                    class="form-control"
+                    id="description"
+                    rows="3"
+                    name="description"
+                    value="adasda"
+            ></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Imagen</label>
+            <input class="form-control" type="file" id="image" name="image"/>
+        </div>
+        <button type="button" class="btn btn-primary" id="btnAgregar">
+            Enviar
+        </button>
+    </form>
+</div>
+
+<script src="script.js"></script>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>
+
+```
+
+```javascript
+window.onload = iniciar;
+
+function iniciar() {
+    var btnAgregar = document.getElementById("btnAgregar");
+    btnAgregar.addEventListener("click", clickBtnAgregar);
+
+}
+
+function clickBtnAgregar() {
+    // Objeto con los atributos de la entidad Zapatos
+    let shoe = {
+        shoeCode: document.getElementById("shoeCode").value,
+        shoeName: document.getElementById("shoeName").value,
+        price: document.getElementById("price").value,
+        stock: document.getElementById("stock").value,
+        description: document.getElementById("description").value,
+        categoryCode: document.getElementById("categoryCode").value,
+        supplierNit: document.getElementById("supplierNit").value,
+    };
+
+    //se obtiene la imagen que se subio
+    var input = document.querySelector('input[type="file"]');
+
+    // El objeto se debe convertir a JSON ya que la peticion no acepta este formato
+    const json = JSON.stringify(shoe);
+    const blob = new Blob([json], {
+        type: "application/json",
+    });
+
+    // Se crea el cuerpo de la peticion de tipo multipart/form-data
+    // y se añaden el objeto y la imagen 
+    // (los nombres de los campos deben ser "shoesRequest" y "image" obligatoriamente)
+    let formData = new FormData();
+    formData.append("shoesRequest", blob);
+    formData.append("image", input.files[0]);
+
+    // se hace la peticion
+    // la url debe apuntar al puerto del gateway
+    // y en la cabecera de la peticion se debe agregar el token
+    async function cargarJson() {
+        let json = await cargarUrl("http://localhost:8003/api/shoes/save");
+    }
+
+    async function cargarUrl(url) {
+        let response = await fetch(url, {
+            method: "POST",
+            body: formData,
+        });
+        return response.json();
+    }
+
+    cargarJson();
+}
+
+```
+
+## Para mostrar una imagen
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- Bootstrap CSS -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+            crossorigin="anonymous"
+    />
+
+    <title>Test Cargar Imagenes</title>
+</head>
+<body>
+<div id="products-cards-container">
+    <div class="products-cards"></div>
+</div>
+
+<script src="load.js"></script>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>
+
+
+```
+
+```javascript
+window.onload = iniciar;
+
+async function iniciar() {
+    const container = document.getElementById("products-cards-container");
+
+    // listado de zapatos
+    let shoes = await cargarJson();
+
+    // se hace la peticion
+    // la url debe apuntar al puerto del gateway
+    // no necesita token
+  
+    async function cargarJson() {
+        let json = cargarUrl("http://localhost:8003/api/shoes/list");
+        console.log(json);
+        return json;
+    }
+
+    async function cargarUrl(url) {
+        let response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json",
+            },
+        });
+        return response.json();
+    }
+    
+    function returnCards(shoes) {
+       // con <img src="data:image/jpeg;base64,${shoes.imageBytes}"/> 
+      // se convierten los bytes del JSON a imagen
+        return (
+            '<div class="products-cards">' +
+            shoes.map((shoes) => ` <div>
+                                    <div class="product-header">
+                                      <img src="data:image/jpeg;base64,${shoes.imageBytes}" width="250px"/>
+                                    </div>
+                                    <div class="product-content">
+                                      <h4>${shoes.shoeName}</h4>
+                                      <p>${shoes.price}</p>
+                                    </div> 
+                                  </div>`
+            )
+                .join("") + "</div>"
+        );
+    }
+
+    container.innerHTML = returnCards(shoes);
+}
+
+
+```

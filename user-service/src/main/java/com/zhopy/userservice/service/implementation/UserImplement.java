@@ -75,7 +75,7 @@ public class UserImplement implements IUserService {
     public void update(UserRequest userRequest, String userId) {
         Optional<User> userSearch = this.userRepository.findById(userId);
         User user = MapperHelper.modelMapper().map(userRequest, User.class);
-        if (StringUtils.hasText(userRequest.getPassword())) {
+        if (StringUtils.hasText(userRequest.getPassword()) && !userRequest.getPassword().equals(userSearch.get().getPassword())) {
             user.setPassword(BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()));
         } else {
             user.setPassword(userSearch.get().getPassword());

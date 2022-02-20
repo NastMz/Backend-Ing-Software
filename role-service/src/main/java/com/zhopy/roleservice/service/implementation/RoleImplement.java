@@ -58,9 +58,7 @@ public class RoleImplement implements IRoleService {
 
     @Override
     public void update(RoleRequest roleRequest, Long roleCode) {
-        Optional<Role> roleSearch = this.roleRepository.findById(roleCode);
-        Role role = roleSearch.get();
-        role.setRoleName(roleRequest.getRoleName());
+        Role role = MapperHelper.modelMapper().map(roleRequest, Role.class);
         this.roleRepository.save(role);
 
     }

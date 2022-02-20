@@ -24,8 +24,10 @@ public class Shoes implements Serializable {
     private String stock;
     @Column(name = "descripcion")
     private String description;
-    @Column(name = "imagen")
-    private String image;
+    @Column(name = "imagen_nombre")
+    private String imageName;
+    @Column(name = "imagen_bytes")
+    private byte[] imageBytes;
     @Column(name = "codigo_categoria")
     private Long categoryCode;
     @Column(name = "nit_proveedor")

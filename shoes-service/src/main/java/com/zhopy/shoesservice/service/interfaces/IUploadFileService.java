@@ -7,13 +7,10 @@ import java.io.IOException;
 
 @Service
 public interface IUploadFileService {
-    String folder = "shoes-service//images//";
 
-    String saveImage(MultipartFile file) throws IOException;
+    String getImageName(MultipartFile file) throws IOException;
 
-    void deleteImage(String name);
-
-    byte[] getImage(String name) throws IOException;
+    byte[] getImageBytes(MultipartFile file) throws IOException;
 
 
 }

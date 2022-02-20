@@ -58,11 +58,8 @@ public class ShoesImplement implements IShoesService {
 
     @Override
     public void update(ShoesRequest shoesRequest, String shoeCode) {
-        Optional<Shoes> shoeSearch = this.shoesRepository.findById(shoeCode);
-        Shoes shoe = shoeSearch.get();
-        shoe.setShoeName(shoesRequest.getShoeName());
+        Shoes shoe = MapperHelper.modelMapper().map(shoesRequest, Shoes.class);
         this.shoesRepository.save(shoe);
-
     }
 
     @Override

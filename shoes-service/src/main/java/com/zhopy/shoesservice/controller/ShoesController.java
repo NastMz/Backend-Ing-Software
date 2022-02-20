@@ -41,9 +41,6 @@ public class ShoesController {
     @GetMapping(value = "/list", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> findAll() throws IOException {
         List<ShoesDTO> shoes = this.shoeService.findAll();
-        for (ShoesDTO shoe : shoes) {
-            shoe.setImageBytes(this.uploadService.getImage(shoe.getImage()));
-        }
         return ResponseEntity.ok(shoes);
     }
 
@@ -51,8 +48,6 @@ public class ShoesController {
     public ResponseEntity<Object> findByShoeCode(@PathVariable("shoeCode") String shoeCode) throws ApiNotFound, IOException {
         this.shoesValidator.validatorById(shoeCode);
         ShoesDTO shoe = this.shoeService.findByShoeCode(shoeCode);
-        byte[] image = this.uploadService.getImage(shoe.getImage());
-        shoe.setImageBytes(image);
         return ResponseEntity.ok(shoe);
     }
 
@@ -60,27 +55,29 @@ public class ShoesController {
     public ResponseEntity<Object> save(@RequestPart ShoesRequest shoesRequest, @RequestPart(required = false) MultipartFile image) throws ApiUnprocessableEntity, IOException {
         this.shoesValidator.validator(shoesRequest);
 
-        String imageName = this.uploadService.saveImage(image);
-        shoesRequest.setImage(imageName);
+        String imageName = this.uploadService.getImageName(image);
+        byte[] imageBytes = this.uploadService.getImageBytes(image);
+        shoesRequest.setImageName(imageName);
+        shoesRequest.setImageBytes(imageBytes);
 
         this.shoeService.save(shoesRequest);
         return ResponseEntity.ok("Los zapatos se guardaron correctamente");
     }
 
-    @PutMapping("/update/{shoeCode}")
-    public ResponseEntity<Object> update(@PathVariable("shoeCode") String shoeCode, @RequestBody ShoesRequest shoesRequest, @RequestParam("image") MultipartFile file) throws ApiNotFound, IOException, ApiUnprocessableEntity {
+    @PutMapping(value = "/update/{shoeCode}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Object> update(@PathVariable("shoeCode") String shoeCode, @RequestPart ShoesRequest shoesRequest, @RequestPart(required = false) MultipartFile image) throws ApiNotFound, IOException, ApiUnprocessableEntity {
         this.shoesValidator.validatorByIdRequest(shoeCode, shoesRequest.getShoeCode());
         this.shoesValidator.validatorUpdate(shoesRequest);
 
         ShoesDTO shoe = this.shoeService.findByShoeCode(shoeCode);
-        if (file.isEmpty()) {
-            shoesRequest.setImage(shoe.getImage());
+        if (image.isEmpty()) {
+            shoesRequest.setImageName(shoe.getImageName());
+            shoesRequest.setImageBytes(shoe.getImageBytes());
         } else {
-            if (!shoe.getImage().equals("default.jpg")) {
-                this.uploadService.deleteImage(shoe.getImage());
-            }
-            String imageName = this.uploadService.saveImage(file);
-            shoesRequest.setImage(imageName);
+            String imageName = this.uploadService.getImageName(image);
+            byte[] imageBytes = this.uploadService.getImageBytes(image);
+            shoesRequest.setImageName(imageName);
+            shoesRequest.setImageBytes(imageBytes);
         }
 
         this.shoeService.update(shoesRequest, shoeCode);
@@ -90,12 +87,6 @@ public class ShoesController {
     @DeleteMapping("/delete/{shoeCode}")
     public ResponseEntity<Object> delete(@PathVariable("shoeCode") String shoeCode) throws ApiNotFound {
         this.shoesValidator.validatorById(shoeCode);
-
-        ShoesDTO shoe = this.shoeService.findByShoeCode(shoeCode);
-        if (!shoe.getImage().equals("default.jpg")) {
-            this.uploadService.deleteImage(shoe.getImage());
-        }
-
         this.shoeService.delete(shoeCode);
         return ResponseEntity.ok("Los zapatos se eliminaron correctamente");
     }

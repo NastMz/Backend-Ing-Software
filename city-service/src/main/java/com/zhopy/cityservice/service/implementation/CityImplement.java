@@ -58,11 +58,8 @@ public class CityImplement implements ICityService {
 
     @Override
     public void update(CityRequest cityRequest, Long cityCode) {
-        Optional<City> citySearch = this.cityRepository.findById(cityCode);
-        City city = citySearch.get();
-        city.setCityName(cityRequest.getCityName());
+        City city = MapperHelper.modelMapper().map(cityRequest, City.class);
         this.cityRepository.save(city);
-
     }
 
     @Override

@@ -23,4 +23,4 @@ spring:
     username: root
     url: jdbc:mysql://localhost/zhoppy?useSSL=false
     dbname: zhoppy
-    password: 230721
+    password: root

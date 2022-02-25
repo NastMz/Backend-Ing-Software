@@ -1,4 +1,4 @@
-service:
+server:
     port: 8090
     error:
         include-stacktrace: never
@@ -13,9 +13,9 @@ jms:
             auth:
                 path: "/oauth/client_credential/accesstoken"
             secret: "secret"
-            expires-in: 43200 # tiempo de expiraciÃ³n serial (12 horas) tiempo en seg
+            expires-in: 43200 # tiempo de expiración serial (12 horas) tiempo en seg
         exclude:
-            path: "/oauth/validate,/oauth/getPayload"
+            path: "/oauth/validate,/api/user/save,/oauth/getPayload"
 
 spring:
   datasource:

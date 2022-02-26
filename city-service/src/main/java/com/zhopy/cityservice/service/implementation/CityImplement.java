@@ -7,13 +7,17 @@ import com.zhopy.cityservice.repository.CityRepository;
 import com.zhopy.cityservice.service.interfaces.ICityService;
 import com.zhopy.cityservice.utils.helpers.MapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@Transactional
+@Qualifier("CityService")
 public class CityImplement implements ICityService {
 
     @Autowired

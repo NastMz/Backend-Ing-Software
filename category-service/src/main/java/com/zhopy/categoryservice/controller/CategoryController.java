@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/category")
 public class CategoryController{
     @Autowired
+    @Qualifier("CategoryService")
     private ICategoryService categoryService;
 
     @Autowired
@@ -55,6 +56,11 @@ public class CategoryController{
         this.categoryValidator.validatorById(codeCategory);
         this.categoryService.delete(codeCategory);
         return ResponseEntity.ok("La categoria se borro correctamente");
+    }
+
+    @GetMapping("/validate/{categoryCode}")
+    public boolean existsByCategoryCode(@PathVariable("categoryCode") Long categoryCode) {
+        return categoryService.existsByCategoryCode(categoryCode);
     }
 
 }

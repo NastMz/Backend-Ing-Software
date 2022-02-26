@@ -5,15 +5,19 @@ import com.zhopy.categoryservice.dto.CategoryRequest;
 import com.zhopy.categoryservice.entity.Category;
 import com.zhopy.categoryservice.repository.CategoryRepository;
 import com.zhopy.categoryservice.service.interfaces.ICategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import com.zhopy.categoryservice.utils.helpers.MapperHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@Transactional
+@Qualifier("CategoryService")
 public class CategoryImplement implements ICategoryService {
     @Autowired
     private CategoryRepository categoryRepository;

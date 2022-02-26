@@ -2,21 +2,19 @@ package com.zhopy.userservice.validator;
 
 import com.zhopy.userservice.dto.UserDTO;
 import com.zhopy.userservice.dto.UserRequest;
-import com.zhopy.userservice.service.interfaces.IRoleService;
 import com.zhopy.userservice.service.interfaces.IUserService;
 import com.zhopy.userservice.utils.exceptions.ApiNotFound;
 import com.zhopy.userservice.utils.exceptions.ApiUnprocessableEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserValidatorImplement implements UserValidator {
 
     @Autowired
+    @Qualifier("UserService")
     private IUserService userService;
-
-    @Autowired
-    private IRoleService roleService;
 
     @Override
     public void validator(UserRequest request) throws ApiUnprocessableEntity {
@@ -55,6 +53,13 @@ public class UserValidatorImplement implements UserValidator {
         }
     }
 
+    @Override
+    public void validatorByEmail(String email) throws ApiNotFound {
+        if (!userService.existsByEmail(email)) {
+            this.message404("El correo no existe");
+        }
+    }
+
     private void validateData(UserRequest request) throws ApiUnprocessableEntity {
         if (request.getEmail() == null || request.getEmail().isBlank()) {
             this.message422("El correo no puede estar vacio");
@@ -71,7 +76,7 @@ public class UserValidatorImplement implements UserValidator {
         if (request.getUserName() == null || request.getUserName().isBlank()) {
             this.message422("El nombre no puede estar vacio");
         }
-        if (!roleService.existsByRoleCode(request.getRoleCode())) {
+        if (!userService.existsByRoleCode(request.getRoleCode())) {
             this.message422("El codigo de rol no existe");
         }
     }

@@ -3,12 +3,15 @@ package com.zhopy.userservice.service.implementation;
 import com.zhopy.userservice.dto.UserDTO;
 import com.zhopy.userservice.dto.UserRequest;
 import com.zhopy.userservice.entity.User;
+import com.zhopy.userservice.feignclients.RoleFeignClient;
+import com.zhopy.userservice.model.Role;
 import com.zhopy.userservice.repository.UserRepository;
 import com.zhopy.userservice.service.interfaces.IUserService;
 import com.zhopy.userservice.utils.hash.BCrypt;
 import com.zhopy.userservice.utils.helpers.MapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -16,12 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Component
 @Transactional
+@Qualifier("UserService")
 public class UserImplement implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleFeignClient roleFeignClient;
 
     @Override
     public List<UserDTO> findAll() {
@@ -30,6 +37,7 @@ public class UserImplement implements IUserService {
 
         for (User user : users) {
             UserDTO userDTO = MapperHelper.modelMapper().map(user, UserDTO.class);
+            userDTO.setRoleName(findByRoleCode(user.getRoleCode()).getRoleName());
             dto.add(userDTO);
         }
 
@@ -42,21 +50,18 @@ public class UserImplement implements IUserService {
         if (!user.isPresent()) {
             return null;
         }
-        return MapperHelper.modelMapper().map(user.get(), UserDTO.class);
+        UserDTO userDTO = MapperHelper.modelMapper().map(user.get(), UserDTO.class);
+        userDTO.setRoleName(findByRoleCode(user.get().getRoleCode()).getRoleName());
+        return userDTO;
     }
 
     @Override
-    public UserDTO findByEmail(String email) {
+    public User findByEmail(String email) {
         Optional<User> user = this.userRepository.findByEmail(email);
-        if (user.isPresent()) {
+        if (!user.isPresent()) {
             return null;
         }
-        return MapperHelper.modelMapper().map(user, UserDTO.class);
-    }
-
-    @Override
-    public User getByEmail(String email) {
-        return userRepository.findByEmail(email).get();
+        return user.get();
     }
 
     @Override
@@ -93,6 +98,16 @@ public class UserImplement implements IUserService {
     @Override
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Role findByRoleCode(Long roleCode) {
+        return roleFeignClient.findByRoleCode(roleCode);
+    }
+
+    @Override
+    public boolean existsByRoleCode(Long roleCode) {
+        return roleFeignClient.existsByRoleCode(roleCode);
     }
 
 }

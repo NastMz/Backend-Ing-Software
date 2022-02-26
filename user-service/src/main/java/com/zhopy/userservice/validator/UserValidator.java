@@ -15,4 +15,6 @@ public interface UserValidator {
     void validatorById(String userId) throws ApiNotFound;
 
     void validatorByIdRequest(String urlId, String userId) throws ApiNotFound, ApiUnprocessableEntity;
+
+    void validatorByEmail(String email) throws ApiNotFound;
 }

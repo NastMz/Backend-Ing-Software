@@ -4,7 +4,6 @@ import com.zhopy.authjwtservice.dto.TokenDTO;
 import com.zhopy.authjwtservice.exceptions.ApiUnauthorized;
 import com.zhopy.authjwtservice.security.JwtIO;
 import com.zhopy.authjwtservice.services.AuthService;
-import com.zhopy.authjwtservice.utils.exceptions.ApiNotFound;
 import com.zhopy.authjwtservice.validator.AuthValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -26,9 +25,8 @@ public class AuthController {
     private JwtIO jwtIO;
 
     @PostMapping(path = "/client_credential/accesstoken", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> login(@RequestBody MultiValueMap<String, String> paramMap, @RequestParam("grant_type") String grantType) throws ApiUnauthorized, ApiNotFound {
+    public ResponseEntity<Object> login(@RequestBody MultiValueMap<String, String> paramMap, @RequestParam("grant_type") String grantType) throws ApiUnauthorized {
         validator.validate(paramMap, grantType);
-        validator.search(paramMap);
         return ResponseEntity.ok(authService.login(paramMap.getFirst("email"), paramMap.getFirst("password")));
     }
 

@@ -22,6 +22,7 @@
 | `city-service`     | `8002` |
 | `shoes-service`    | `8003` |
 | `category-service` | `8005` |
+| `buy-service`      | `8007` |
 | `auth-jwt-service` | `8090` |
 | `gateway-service`  | `8080` |
 
@@ -37,7 +38,7 @@
 | `/api/*/delete/{id}`  | DELETE  |  
 | `/api/*/update/{id}`  | PUT     |
 
-> `*` *Palabra antes de -service*
+> `*` -> *Palabra antes de -service*
 
 # TOKEN
 

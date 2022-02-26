@@ -2,22 +2,20 @@ package com.zhopy.shoesservice.validator;
 
 import com.zhopy.shoesservice.dto.ShoesDTO;
 import com.zhopy.shoesservice.dto.ShoesRequest;
-import com.zhopy.shoesservice.service.interfaces.ICategoryService;
 import com.zhopy.shoesservice.service.interfaces.IShoesService;
 import com.zhopy.shoesservice.service.interfaces.ISupplierService;
 import com.zhopy.shoesservice.utils.exeptions.ApiNotFound;
 import com.zhopy.shoesservice.utils.exeptions.ApiUnprocessableEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ShoesValidatorImplement implements ShoesValidator {
 
     @Autowired
+    @Qualifier("ShoesService")
     private IShoesService shoeService;
-
-    @Autowired
-    private ICategoryService categoryService;
 
     @Autowired
     private ISupplierService supplierService;
@@ -72,7 +70,7 @@ public class ShoesValidatorImplement implements ShoesValidator {
         if (request.getDescription() == null || request.getDescription().isBlank()) {
             this.message422("La descripcion no puede estar vacia");
         }
-        if (!categoryService.existsByCategoryCode(request.getCategoryCode())) {
+        if (!shoeService.existsByCategoryCode(request.getCategoryCode())) {
             this.message422("El codigo de categoria no existe");
         }
         if (!supplierService.existsBySupplierNit(request.getSupplierNit())) {

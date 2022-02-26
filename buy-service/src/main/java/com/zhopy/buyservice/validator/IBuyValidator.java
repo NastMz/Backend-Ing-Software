@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 // Interface para la validacion de datos recibidos para la creacion de compras
 @Service
-public interface BuyValidator {
+public interface IBuyValidator {
     void validator(BuyRequest buyRequest) throws ApiUnprocessableEntity;
 
     void validatorById(Long buyNumber) throws ApiNotFound;

@@ -4,7 +4,7 @@ import com.zhopy.categoryservice.dto.CategoryRequest;
 import com.zhopy.categoryservice.service.interfaces.ICategoryService;
 import com.zhopy.categoryservice.utils.exeptions.ApiNotFound;
 import com.zhopy.categoryservice.utils.exeptions.ApiUnprocessableEntity;
-import com.zhopy.categoryservice.validator.CategoryValidator;
+import com.zhopy.categoryservice.validator.ICategoryValidator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -23,7 +23,8 @@ public class CategoryController{
     private ICategoryService categoryService;
 
     @Autowired
-    private CategoryValidator categoryValidator;
+    @Qualifier("CategoryValidator")
+    private ICategoryValidator categoryValidator;
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAll() {

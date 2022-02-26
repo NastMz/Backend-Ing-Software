@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 // Interface para la validacion de datos recibidos para la creacion de usuarios
 @Service
-public interface CategoryValidator {
+public interface ICategoryValidator {
     void validator(CategoryRequest categoryRequest) throws ApiUnprocessableEntity;
 
     void validatorById(Long categoryCode) throws ApiNotFound;

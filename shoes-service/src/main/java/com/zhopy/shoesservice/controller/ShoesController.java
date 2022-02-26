@@ -6,7 +6,7 @@ import com.zhopy.shoesservice.service.interfaces.IShoesService;
 import com.zhopy.shoesservice.service.interfaces.IUploadFileService;
 import com.zhopy.shoesservice.utils.exeptions.ApiNotFound;
 import com.zhopy.shoesservice.utils.exeptions.ApiUnprocessableEntity;
-import com.zhopy.shoesservice.validator.ShoesValidator;
+import com.zhopy.shoesservice.validator.IShoesValidator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -39,7 +39,8 @@ public class ShoesController {
     private IUploadFileService uploadService;
 
     @Autowired
-    private ShoesValidator shoesValidator;
+    @Qualifier("ShoesValidator")
+    private IShoesValidator shoesValidator;
 
     @GetMapping(value = "/list", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> findAll() throws IOException {

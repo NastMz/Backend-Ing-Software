@@ -4,7 +4,7 @@ import com.zhopy.buyservice.dto.BuyRequest;
 import com.zhopy.buyservice.service.interfaces.IBuyService;
 import com.zhopy.buyservice.utils.exeptions.ApiNotFound;
 import com.zhopy.buyservice.utils.exeptions.ApiUnprocessableEntity;
-import com.zhopy.buyservice.validator.BuyValidator;
+import com.zhopy.buyservice.validator.IBuyValidator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -24,7 +24,8 @@ public class BuyController {
     private IBuyService buyService;
 
     @Autowired
-    private BuyValidator buyValidator;
+    @Qualifier("BuyValidator")
+    private IBuyValidator buyValidator;
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAll() {

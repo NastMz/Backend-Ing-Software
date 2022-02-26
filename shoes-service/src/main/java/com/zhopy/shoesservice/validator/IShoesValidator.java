@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 // Interface para la validacion de datos recibidos para la creacion de zapatos
 @Service
-public interface ShoesValidator {
+public interface IShoesValidator {
     void validator(ShoesRequest shoesRequest) throws ApiUnprocessableEntity;
 
     void validatorById(String shoeCode) throws ApiNotFound;

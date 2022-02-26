@@ -102,12 +102,25 @@ public class UserImplement implements IUserService {
 
     @Override
     public Role findByRoleCode(Long roleCode) {
-        return roleFeignClient.findByRoleCode(roleCode);
+        Role role;
+        try {
+            role = roleFeignClient.findByRoleCode(roleCode);
+        } catch (Exception e) {
+            return null;
+        }
+        return role;
     }
 
     @Override
     public boolean existsByRoleCode(Long roleCode) {
-        return roleFeignClient.existsByRoleCode(roleCode);
+        boolean exists;
+        try {
+            exists = roleFeignClient.existsByRoleCode(roleCode);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return exists;
     }
 
 }

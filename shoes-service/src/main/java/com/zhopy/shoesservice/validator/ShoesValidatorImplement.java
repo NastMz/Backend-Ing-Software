@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ShoesValidatorImplement implements ShoesValidator {
+@Qualifier("ShoesValidator")
+public class ShoesValidatorImplement implements IShoesValidator {
 
     @Autowired
     @Qualifier("ShoesService")

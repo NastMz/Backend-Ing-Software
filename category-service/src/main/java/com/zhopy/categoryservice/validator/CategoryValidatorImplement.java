@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CategoryValidatorImplement implements CategoryValidator {
+@Qualifier("CategoryValidator")
+public class CategoryValidatorImplement implements ICategoryValidator {
 
     @Autowired
     @Qualifier("CategoryService")

@@ -4,7 +4,7 @@ import com.zhopy.roleservice.dto.RoleRequest;
 import com.zhopy.roleservice.service.interfaces.IRoleService;
 import com.zhopy.roleservice.utils.exeptions.ApiNotFound;
 import com.zhopy.roleservice.utils.exeptions.ApiUnprocessableEntity;
-import com.zhopy.roleservice.validator.RoleValidator;
+import com.zhopy.roleservice.validator.IRoleValidator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -24,7 +24,8 @@ public class RoleController {
     private IRoleService roleService;
 
     @Autowired
-    private RoleValidator roleValidator;
+    @Qualifier("RoleValidator")
+    private IRoleValidator roleValidator;
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAll() {

@@ -9,7 +9,7 @@ import com.zhopy.userservice.utils.exceptions.ApiNotFound;
 import com.zhopy.userservice.utils.exceptions.ApiUnprocessableEntity;
 import com.zhopy.userservice.utils.hash.BCrypt;
 import com.zhopy.userservice.utils.helpers.MapperHelper;
-import com.zhopy.userservice.validator.UserValidator;
+import com.zhopy.userservice.validator.IUserValidator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -29,7 +29,8 @@ public class UserController {
     private IUserService userService;
 
     @Autowired
-    private UserValidator userValidator;
+    @Qualifier("UserValidator")
+    private IUserValidator userValidator;
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAll() {

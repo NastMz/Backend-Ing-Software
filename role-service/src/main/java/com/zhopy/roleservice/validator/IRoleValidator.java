@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 // Interface para la validacion de datos recibidos para la creacion de usuarios
 @Service
-public interface RoleValidator {
+public interface IRoleValidator {
     void validator(RoleRequest roleRequest) throws ApiUnprocessableEntity;
 
     void validatorById(Long roleCode) throws ApiNotFound;

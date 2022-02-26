@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserValidatorImplement implements UserValidator {
+@Qualifier("UserValidator")
+public class UserValidatorImplement implements IUserValidator {
 
     @Autowired
     @Qualifier("UserService")

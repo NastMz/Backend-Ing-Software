@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 // Interface para la validacion de datos recibidos para la creacion de usuarios
 @Service
-public interface CityValidator {
+public interface ICityValidator {
     void validator(CityRequest cityRequest) throws ApiUnprocessableEntity;
 
     void validatorById(Long cityCode) throws ApiNotFound;

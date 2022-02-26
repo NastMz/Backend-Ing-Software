@@ -1,17 +1,19 @@
 package com.zhopy.categoryservice.validator;
 
-import com.zhopy.categoryservice.dto.CategoryRequest;
 import com.zhopy.categoryservice.dto.CategoryDTO;
+import com.zhopy.categoryservice.dto.CategoryRequest;
 import com.zhopy.categoryservice.service.interfaces.ICategoryService;
 import com.zhopy.categoryservice.utils.exeptions.ApiNotFound;
 import com.zhopy.categoryservice.utils.exeptions.ApiUnprocessableEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryValidatorImplement implements CategoryValidator {
 
     @Autowired
+    @Qualifier("CategoryService")
     private ICategoryService categoryService;
 
     @Override
@@ -52,8 +54,8 @@ public class CategoryValidatorImplement implements CategoryValidator {
     }
 
     private void validateName(CategoryRequest roleRequest) throws ApiUnprocessableEntity {
-        CategoryDTO citySearch = this.categoryService.findByCategoryCode(roleRequest.getCategoryCode());
-        if (!roleRequest.getCategoryName().equals(citySearch.getCategoryName()) && categoryService.existsByCategoryName(roleRequest.getCategoryName())) {
+        CategoryDTO categorySearch = this.categoryService.findByCategoryCode(roleRequest.getCategoryCode());
+        if (!roleRequest.getCategoryName().equals(categorySearch.getCategoryName()) && categoryService.existsByCategoryName(roleRequest.getCategoryName())) {
             this.message422("El nombre ya existe");
         }
     }

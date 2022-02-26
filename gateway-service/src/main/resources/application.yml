@@ -50,6 +50,22 @@ spring:
                 - id: shoes-service
                   uri: ${internal.lb.uri}:8003
                   predicates:
+                    - Path=/api/shoes/detail/**
+                - id: shoes-service
+                  uri: ${internal.lb.uri}:8003
+                  predicates:
                     - Path=/api/shoes/**
+                  filters:
+                    - AuthFilter
+                - id: category-service
+                  uri: ${internal.lb.uri}:8005
+                  predicates:
+                    - Path=/api/category/**
+                  filters:
+                    - AuthFilter
+                - id: buy-service
+                  uri: ${internal.lb.uri}:8007
+                  predicates:
+                    - Path=/api/buy/**
                   filters:
                     - AuthFilter

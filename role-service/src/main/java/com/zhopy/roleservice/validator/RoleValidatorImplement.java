@@ -6,12 +6,14 @@ import com.zhopy.roleservice.service.interfaces.IRoleService;
 import com.zhopy.roleservice.utils.exeptions.ApiNotFound;
 import com.zhopy.roleservice.utils.exeptions.ApiUnprocessableEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RoleValidatorImplement implements RoleValidator {
 
     @Autowired
+    @Qualifier("RoleService")
     private IRoleService roleService;
 
     @Override

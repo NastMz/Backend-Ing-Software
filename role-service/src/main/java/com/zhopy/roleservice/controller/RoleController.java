@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class RoleController {
 
     @Autowired
+    @Qualifier("RoleService")
     private IRoleService roleService;
 
     @Autowired
@@ -51,10 +53,16 @@ public class RoleController {
     }
 
     @DeleteMapping("/delete/{roleCode}")
-    public ResponseEntity<Object> delete(@PathVariable("roleCode") Long codeRole) throws ApiNotFound {
-        this.roleValidator.validatorById(codeRole);
-        this.roleService.delete(codeRole);
+    public ResponseEntity<Object> delete(@PathVariable("roleCode") Long roleCode) throws ApiNotFound {
+        this.roleValidator.validatorById(roleCode);
+        this.roleService.delete(roleCode);
         return ResponseEntity.ok("El rol se elimino correctamente");
+    }
+
+    @GetMapping("/validate/{roleCode}")
+    public ResponseEntity<Object> existsByRoleCode(@PathVariable("roleCode") Long roleCode) throws ApiNotFound {
+        this.roleValidator.validatorById(roleCode);
+        return ResponseEntity.ok(roleService.existsByRoleCode(roleCode));
     }
 
 }

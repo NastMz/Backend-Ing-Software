@@ -5,12 +5,14 @@ import com.zhopy.buyservice.service.interfaces.IBuyService;
 import com.zhopy.buyservice.utils.exeptions.ApiNotFound;
 import com.zhopy.buyservice.utils.exeptions.ApiUnprocessableEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BuyValidatorImplement implements BuyValidator {
 
     @Autowired
+    @Qualifier("BuyService")
     private IBuyService buyService;
 
     @Override
@@ -37,10 +39,10 @@ public class BuyValidatorImplement implements BuyValidator {
         if (request.getTotal() < 0) {
             this.message422("El total no puede ser menr que cero");
         }
-        /*Validar que el codigo de usuario exista
-        if (!userService.existsByUserCode(request.getUserCode())) {
+
+        if (!buyService.existsByUserId(request.getUserId())) {
             this.message422("El codigo de usuario no existe");
-        }*/
+        }
     }
 
     @Override

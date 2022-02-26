@@ -13,6 +13,6 @@ public class ShoesDTO implements Serializable {
     private String description;
     private String imageName;
     private byte[] imageBytes;
-    private Long categoryCode;
-    private Long supplierNit;
+    private String categoryName;
+    private String supplierName;
 }

@@ -7,13 +7,17 @@ import com.zhopy.roleservice.repository.RoleRepository;
 import com.zhopy.roleservice.service.interfaces.IRoleService;
 import com.zhopy.roleservice.utils.helpers.MapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@Transactional
+@Qualifier("RoleService")
 public class RoleImplement implements IRoleService {
 
     @Autowired

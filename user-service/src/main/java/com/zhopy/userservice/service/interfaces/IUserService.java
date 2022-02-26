@@ -3,6 +3,7 @@ package com.zhopy.userservice.service.interfaces;
 import com.zhopy.userservice.dto.UserDTO;
 import com.zhopy.userservice.dto.UserRequest;
 import com.zhopy.userservice.entity.User;
+import com.zhopy.userservice.model.Role;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +14,7 @@ public interface IUserService {
 
     UserDTO findByUserId(String userId);
 
-    UserDTO findByEmail(String email);
-
-    User getByEmail(String email);
+    User findByEmail(String email);
 
     void save(UserRequest userRequest);
 
@@ -26,4 +25,8 @@ public interface IUserService {
     boolean existsByUserId(String userId);
 
     boolean existsByEmail(String email);
+
+    Role findByRoleCode(Long roleCode);
+
+    boolean existsByRoleCode(Long roleCode);
 }

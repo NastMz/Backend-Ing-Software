@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,11 @@ import java.util.List;
 public class ShoesController {
 
     @Autowired
+    @Qualifier("ShoesService")
     private IShoesService shoeService;
 
     @Autowired
+    @Qualifier("UploadService")
     private IUploadFileService uploadService;
 
     @Autowired

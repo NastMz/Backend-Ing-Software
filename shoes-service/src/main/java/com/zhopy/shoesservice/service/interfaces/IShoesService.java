@@ -2,6 +2,7 @@ package com.zhopy.shoesservice.service.interfaces;
 
 import com.zhopy.shoesservice.dto.ShoesDTO;
 import com.zhopy.shoesservice.dto.ShoesRequest;
+import com.zhopy.shoesservice.model.Category;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,4 +24,8 @@ public interface IShoesService {
     boolean existsByShoeCode(String shoeCode);
 
     boolean existsByShoeName(String shoeName);
+
+    Category findByCategoryCode(Long categoryCode);
+
+    boolean existsByCategoryCode(Long categoryCode);
 }

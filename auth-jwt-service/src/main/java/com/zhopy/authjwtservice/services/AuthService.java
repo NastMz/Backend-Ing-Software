@@ -1,13 +1,11 @@
 package com.zhopy.authjwtservice.services;
 
 import com.zhopy.authjwtservice.dto.JwtResponse;
-import com.zhopy.authjwtservice.dto.UserDTO;
-import com.zhopy.authjwtservice.entity.User;
+import com.zhopy.authjwtservice.feignclients.UserFeignClient;
+import com.zhopy.authjwtservice.model.User;
+import com.zhopy.authjwtservice.model.UserValidate;
 import com.zhopy.authjwtservice.security.JwtIO;
-import com.zhopy.authjwtservice.services.interfaces.IUserService;
 import com.zhopy.authjwtservice.utils.DateUtils;
-import com.zhopy.authjwtservice.utils.helpers.MapperHelper;
-import com.zhopy.authjwtservice.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,9 +14,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     @Autowired
-    UserValidator userValidator;
-    @Autowired
-    IUserService userService;
+    UserFeignClient userFeignClient;
     @Autowired
     private JwtIO jwtIO;
     @Autowired
@@ -28,17 +24,16 @@ public class AuthService {
 
     public JwtResponse login(String email, String password) {
         JwtResponse jwtResponse = null;
-        if (userValidator.validatorCredentials(email, password)) {
-            User user = userService.getByEmail(email);
-            UserDTO userDTO = MapperHelper.modelMapper().map(user, UserDTO.class);
-            jwtResponse = JwtResponse.builder()
-                    .tokenType("bearer")
-                    .accessToken(jwtIO.generateToken(userDTO))
-                    .issueAt(dateUtils.getDateMillis() + "")
-                    .clientId(email)
-                    .expiresIn(EXPIRES_IN)
-                    .build();
-        }
+        UserValidate userValidate = new UserValidate(email, password);
+        User user = userFeignClient.findByEmail(userValidate);
+        jwtResponse = JwtResponse.builder()
+                .tokenType("bearer")
+                .accessToken(jwtIO.generateToken(user))
+                .issueAt(dateUtils.getDateMillis() + "")
+                .clientId(email)
+                .expiresIn(EXPIRES_IN)
+                .build();
+
         return jwtResponse;
     }
 

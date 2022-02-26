@@ -19,4 +19,6 @@ public interface IBuyService {
     void delete(Long buyNumber);
 
     boolean existsByBuyNumber(Long buyNumber);
+
+    boolean existsByUserId(String userId);
 }

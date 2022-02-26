@@ -7,12 +7,14 @@ import com.zhopy.cityservice.service.interfaces.ICityService;
 import com.zhopy.cityservice.utils.exeptions.ApiNotFound;
 import com.zhopy.cityservice.utils.exeptions.ApiUnprocessableEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CityValidatorImplement implements CityValidator {
 
     @Autowired
+    @Qualifier("CityService")
     private ICityService cityService;
 
     @Override

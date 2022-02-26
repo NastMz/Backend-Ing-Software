@@ -1,0 +1,27 @@
+server:
+    port: 8090
+    error:
+        include-stacktrace: never
+        include-message: always
+jms:
+    jwt:
+        security:
+            enabled: true
+        timezone: "America/Bogota"
+        issuer: "www.zhopy.com"
+        token:
+            auth:
+                path: "/oauth/client_credential/accesstoken"
+            secret: "secret"
+            expires-in: 43200 # tiempo de expiraci�n serial (12 horas) tiempo en seg
+        exclude:
+            path: "/oauth/validate,/api/user/save,/oauth/getPayload"
+
+spring:
+    application:
+        name: buy-service
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: root
+        url: jdbc:mysql://localhost/zhoppy?useSSL=false
+        password: root

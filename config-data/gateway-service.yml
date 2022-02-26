@@ -1,0 +1,73 @@
+server:
+    port: 8080
+    error:
+        include-stacktrace: never
+        include-message: always
+
+internal.lb.uri: http://localhost
+spring:
+    application:
+            name: gateway-service
+    cloud:
+        gateway:
+            default-filters:
+                - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            globalcors:
+                corsConfigurations:
+                    '[/**]':
+                        allowedOrigins: "*"
+                        allowedMethods: "*"
+                        allowedHeaders: "*"
+            routes:
+                - id: user-service
+                  uri: ${internal.lb.uri}:8000
+                  predicates:
+                    - Path=/api/user/save
+                - id: user-service
+                  uri: ${internal.lb.uri}:8000
+                  predicates:
+                    - Path=/api/user/**
+                  filters:
+                    - AuthFilter
+                - id: role-service
+                  uri: ${internal.lb.uri}:8001
+                  predicates:
+                    - Path=/api/role/**
+                  filters:
+                    - AuthFilter
+                - id: auth-service
+                  uri: ${internal.lb.uri}:8090
+                  predicates:
+                    - Path=/oauth/**
+                - id: city-service
+                  uri: ${internal.lb.uri}:8002
+                  predicates:
+                    - Path=/api/city/**
+                  filters:
+                    - AuthFilter
+                - id: shoes-service
+                  uri: ${internal.lb.uri}:8003
+                  predicates:
+                    - Path=/api/shoes/list
+                - id: shoes-service
+                  uri: ${internal.lb.uri}:8003
+                  predicates:
+                    - Path=/api/shoes/detail/**
+                - id: shoes-service
+                  uri: ${internal.lb.uri}:8003
+                  predicates:
+                    - Path=/api/shoes/**
+                  filters:
+                    - AuthFilter
+                - id: category-service
+                  uri: ${internal.lb.uri}:8005
+                  predicates:
+                    - Path=/api/category/**
+                  filters:
+                    - AuthFilter
+                - id: buy-service
+                  uri: ${internal.lb.uri}:8007
+                  predicates:
+                    - Path=/api/buy/**
+                  filters:
+                    - AuthFilter

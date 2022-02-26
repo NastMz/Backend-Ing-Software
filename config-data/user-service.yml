@@ -1,0 +1,13 @@
+server:
+    error:
+        include-message: always
+        include-stacktrace: never
+    port: 8000
+spring:
+    application:
+        name: user-service
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: root
+        url: jdbc:mysql://localhost/zhoppy?useSSL=false
+        username: root

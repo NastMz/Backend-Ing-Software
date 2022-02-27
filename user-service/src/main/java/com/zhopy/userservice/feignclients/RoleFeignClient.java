@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "role-service", url = "http://localhost:8001")
+@FeignClient(name = "role-service")
 public interface RoleFeignClient {
 
     @GetMapping(value = "/api/role/detail/{roleCode}")

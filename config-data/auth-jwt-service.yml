@@ -1,5 +1,5 @@
 server:
-    port: 8090
+    port: ${PORT:${SERVER_PORT:0}}
     error:
         include-stacktrace: never
         include-message: always
@@ -9,8 +9,8 @@ eureka:
         register-with-eureka: true
         service-url:
             default-zone: http://localhost:8761/eureka
-        instance:
-            hostname: localhost
+    instance:
+        instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 jms:
     jwt:
         security:

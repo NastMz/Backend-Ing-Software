@@ -1,7 +1,8 @@
 package com.zhopy.userservice.controller;
 
 import com.zhopy.userservice.dto.UserDTO;
-import com.zhopy.userservice.dto.UserRequest;
+import com.zhopy.userservice.dto.UserRequestRegister;
+import com.zhopy.userservice.dto.UserRequestUpdate;
 import com.zhopy.userservice.dto.UserValidate;
 import com.zhopy.userservice.entity.User;
 import com.zhopy.userservice.service.interfaces.IUserService;
@@ -47,17 +48,17 @@ public class UserController {
     }
 
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> save(@RequestBody UserRequest userRequest) throws ApiUnprocessableEntity {
-        this.userValidator.validator(userRequest);
-        this.userService.save(userRequest);
+    public ResponseEntity<Object> save(@RequestBody UserRequestRegister userRequestRegister) throws ApiUnprocessableEntity {
+        this.userValidator.validator(userRequestRegister);
+        this.userService.save(userRequestRegister);
         return ResponseEntity.ok("El usuario se guardo correctamente");
     }
 
     @PutMapping("/update/{userId}")
-    public ResponseEntity<Object> update(@PathVariable("userId") String userId, @RequestBody UserRequest userRequest) throws ApiNotFound, ApiUnprocessableEntity {
-        this.userValidator.validatorByIdRequest(userId, userRequest.getUserId());
-        this.userValidator.validatorUpdate(userRequest);
-        this.userService.update(userRequest, userId);
+    public ResponseEntity<Object> update(@PathVariable("userId") String userId, @RequestBody UserRequestUpdate userRequestUpdate) throws ApiNotFound, ApiUnprocessableEntity {
+        this.userValidator.validatorByIdRequest(userId, userRequestUpdate.getUserId());
+        this.userValidator.validatorUpdate(userRequestUpdate);
+        this.userService.update(userRequestUpdate, userId);
         return ResponseEntity.ok("El usuario se actualizo correctamente");
     }
 

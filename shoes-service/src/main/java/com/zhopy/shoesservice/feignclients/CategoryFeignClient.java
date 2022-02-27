@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "category-service")
 public interface CategoryFeignClient {
-
     @GetMapping(value = "/api/category/detail/{categoryCode}")
     Category findByCategoryCode(@PathVariable("categoryCode") Long categoryCode);
 

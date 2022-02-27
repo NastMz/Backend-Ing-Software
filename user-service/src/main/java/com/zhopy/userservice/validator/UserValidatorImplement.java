@@ -1,7 +1,8 @@
 package com.zhopy.userservice.validator;
 
 import com.zhopy.userservice.dto.UserDTO;
-import com.zhopy.userservice.dto.UserRequest;
+import com.zhopy.userservice.dto.UserRequestRegister;
+import com.zhopy.userservice.dto.UserRequestUpdate;
 import com.zhopy.userservice.service.interfaces.IUserService;
 import com.zhopy.userservice.utils.exceptions.ApiNotFound;
 import com.zhopy.userservice.utils.exceptions.ApiUnprocessableEntity;
@@ -18,11 +19,11 @@ public class UserValidatorImplement implements IUserValidator {
     private IUserService userService;
 
     @Override
-    public void validator(UserRequest request) throws ApiUnprocessableEntity {
+    public void validator(UserRequestRegister request) throws ApiUnprocessableEntity {
         if (request.getUserId() == null || request.getUserId().isBlank()) {
             this.message422("El documento no puede estar vacio");
         }
-        validateData(request);
+        validateDataRegister(request);
         if (userService.existsByUserId(request.getUserId())) {
             this.message422("El documento ya existe");
         }
@@ -32,9 +33,9 @@ public class UserValidatorImplement implements IUserValidator {
     }
 
     @Override
-    public void validatorUpdate(UserRequest request) throws ApiUnprocessableEntity {
-        validateData(request);
-        validateEmail(request);
+    public void validatorUpdate(UserRequestUpdate request) throws ApiUnprocessableEntity {
+        validateDataUpdate(request);
+        validateEmail(request.getUserId(), request.getEmail());
     }
 
     @Override
@@ -61,22 +62,8 @@ public class UserValidatorImplement implements IUserValidator {
         }
     }
 
-    private void validateData(UserRequest request) throws ApiUnprocessableEntity {
-        if (request.getEmail() == null || request.getEmail().isBlank()) {
-            this.message422("El correo no puede estar vacio");
-        }
-        if (request.getAddress() == null || request.getAddress().isBlank()) {
-            this.message422("La direccion no puede estar vacia");
-        }
-        if (request.getPassword() == null || request.getPassword().isBlank()) {
-            this.message422("La contraseña no puede estar vacia");
-        }
-        if (request.getPhone() == null || request.getPhone().isBlank()) {
-            this.message422("El telefono no puede estar vacio");
-        }
-        if (request.getUserName() == null || request.getUserName().isBlank()) {
-            this.message422("El nombre no puede estar vacio");
-        }
+    private void validateDataRegister(UserRequestRegister request) throws ApiUnprocessableEntity {
+        validateData(request.getEmail(), request.getAddress(), request.getPassword(), request.getPhone(), request.getUserName());
         if (request.getRoleCode() == null || request.getRoleCode().toString().isBlank()) {
             this.message422("El codigo de rol no puede estar vacio");
         }
@@ -94,9 +81,31 @@ public class UserValidatorImplement implements IUserValidator {
         }
     }
 
-    private void validateEmail(UserRequest userRequest) throws ApiUnprocessableEntity {
-        UserDTO userSearch = this.userService.findByUserId(userRequest.getUserId());
-        if (!userRequest.getEmail().equals(userSearch.getEmail()) && userService.existsByEmail(userRequest.getEmail())) {
+    private void validateDataUpdate(UserRequestUpdate request) throws ApiUnprocessableEntity {
+        validateData(request.getEmail(), request.getAddress(), request.getPassword(), request.getPhone(), request.getUserName());
+    }
+
+    private void validateData(String email, String address, String password, String phone, String userName) throws ApiUnprocessableEntity {
+        if (email == null || email.isBlank()) {
+            this.message422("El correo no puede estar vacio");
+        }
+        if (address == null || address.isBlank()) {
+            this.message422("La direccion no puede estar vacia");
+        }
+        if (password == null || password.isBlank()) {
+            this.message422("La contraseña no puede estar vacia");
+        }
+        if (phone == null || phone.isBlank()) {
+            this.message422("El telefono no puede estar vacio");
+        }
+        if (userName == null || userName.isBlank()) {
+            this.message422("El nombre no puede estar vacio");
+        }
+    }
+
+    private void validateEmail(String userId, String email) throws ApiUnprocessableEntity {
+        UserDTO userSearch = this.userService.findByUserId(userId);
+        if (!email.equals(userSearch.getEmail()) && userService.existsByEmail(email)) {
             this.message422("El correo ya existe");
         }
     }

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "question-service")
 public interface QuestionFeignClient {
-
     @GetMapping(value = "/api/question/detail/{questionCode}")
     Question findByQuestionCode(@PathVariable("questionCode") Long questionCode);
 

@@ -1,7 +1,8 @@
 package com.zhopy.userservice.service.implementation;
 
 import com.zhopy.userservice.dto.UserDTO;
-import com.zhopy.userservice.dto.UserRequest;
+import com.zhopy.userservice.dto.UserRequestRegister;
+import com.zhopy.userservice.dto.UserRequestUpdate;
 import com.zhopy.userservice.entity.User;
 import com.zhopy.userservice.feignclients.QuestionFeignClient;
 import com.zhopy.userservice.feignclients.RoleFeignClient;
@@ -70,9 +71,9 @@ public class UserImplement implements IUserService {
     }
 
     @Override
-    public void save(UserRequest userRequest) {
-        User user = MapperHelper.modelMapper().map(userRequest, User.class);
-        user.setPassword(BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()));
+    public void save(UserRequestRegister userRequestRegister) {
+        User user = MapperHelper.modelMapper().map(userRequestRegister, User.class);
+        user.setPassword(BCrypt.hashpw(userRequestRegister.getPassword(), BCrypt.gensalt()));
         this.userRepository.save(user);
     }
 
@@ -82,11 +83,11 @@ public class UserImplement implements IUserService {
     }
 
     @Override
-    public void update(UserRequest userRequest, String userId) {
+    public void update(UserRequestUpdate userRequestUpdate, String userId) {
         Optional<User> userSearch = this.userRepository.findById(userId);
-        User user = MapperHelper.modelMapper().map(userRequest, User.class);
-        if (StringUtils.hasText(userRequest.getPassword()) && !userRequest.getPassword().equals(userSearch.get().getPassword())) {
-            user.setPassword(BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()));
+        User user = MapperHelper.modelMapper().map(userRequestUpdate, User.class);
+        if (StringUtils.hasText(userRequestUpdate.getPassword()) && !userRequestUpdate.getPassword().equals(userSearch.get().getPassword())) {
+            user.setPassword(BCrypt.hashpw(userRequestUpdate.getPassword(), BCrypt.gensalt()));
         } else {
             user.setPassword(userSearch.get().getPassword());
         }

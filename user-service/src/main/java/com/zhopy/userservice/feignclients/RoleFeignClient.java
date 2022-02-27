@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "role-service")
 public interface RoleFeignClient {
-
     @GetMapping(value = "/api/role/detail/{roleCode}")
     Role findByRoleCode(@PathVariable("roleCode") Long roleCode);
 

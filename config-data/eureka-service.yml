@@ -1,0 +1,9 @@
+server:
+    error:
+        include-message: always
+        include-stacktrace: never
+    port: 8761
+eureka:
+    client:
+        fetch-registry: false
+        register-with-eureka: false

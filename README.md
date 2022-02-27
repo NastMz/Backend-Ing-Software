@@ -23,8 +23,10 @@
 | `shoes-service`    | `8003` |
 | `category-service` | `8005` |
 | `buy-service`      | `8007` |
-| `auth-jwt-service` | `8090` |
+| `config-service`   | `8070` |
 | `gateway-service`  | `8080` |
+| `auth-jwt-service` | `8090` |
+| `eureka-service`   | `8761` |
 
 # URIs
 

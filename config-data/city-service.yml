@@ -3,9 +3,15 @@ server:
         include-message: always
         include-stacktrace: never
     port: 8002
+eureka:
+    client:
+        fetch-registry: false
+        register-with-eureka: false
+        service-url:
+            default-zone: http://localhost:8761/eureka
+        instance:
+            hostname: localhost
 spring:
-    application:
-        name: city-service
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: root

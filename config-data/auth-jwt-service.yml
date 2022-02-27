@@ -3,6 +3,14 @@ server:
     error:
         include-stacktrace: never
         include-message: always
+eureka:
+    client:
+        fetch-registry: false
+        register-with-eureka: false
+        service-url:
+            default-zone: http://localhost:8761/eureka
+        instance:
+            hostname: localhost
 jms:
     jwt:
         security:
@@ -18,10 +26,9 @@ jms:
             path: "/oauth/validate,/api/user/save,/oauth/getPayload"
 
 spring:
-    application:
-        name: buy-service
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: root
         url: jdbc:mysql://localhost/zhoppy?useSSL=false
         password: root
+

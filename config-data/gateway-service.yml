@@ -3,11 +3,17 @@ server:
     error:
         include-stacktrace: never
         include-message: always
+eureka:
+    client:
+        fetch-registry: false
+        register-with-eureka: false
+        service-url:
+            default-zone: http://localhost:8761/eureka
+        instance:
+            hostname: localhost
 
 internal.lb.uri: http://localhost
 spring:
-    application:
-            name: gateway-service
     cloud:
         gateway:
             default-filters:

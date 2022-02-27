@@ -3,7 +3,9 @@ package com.zhopy.userservice.service.implementation;
 import com.zhopy.userservice.dto.UserDTO;
 import com.zhopy.userservice.dto.UserRequest;
 import com.zhopy.userservice.entity.User;
+import com.zhopy.userservice.feignclients.QuestionFeignClient;
 import com.zhopy.userservice.feignclients.RoleFeignClient;
+import com.zhopy.userservice.model.Question;
 import com.zhopy.userservice.model.Role;
 import com.zhopy.userservice.repository.UserRepository;
 import com.zhopy.userservice.service.interfaces.IUserService;
@@ -29,6 +31,9 @@ public class UserImplement implements IUserService {
 
     @Autowired
     private RoleFeignClient roleFeignClient;
+
+    @Autowired
+    private QuestionFeignClient questionFeignClient;
 
     @Override
     public List<UserDTO> findAll() {
@@ -116,6 +121,29 @@ public class UserImplement implements IUserService {
         boolean exists;
         try {
             exists = roleFeignClient.existsByRoleCode(roleCode);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return exists;
+    }
+
+    @Override
+    public Question findByQuestionCode(Long questionCode) {
+        Question question;
+        try {
+            question = questionFeignClient.findByQuestionCode(questionCode);
+        } catch (Exception e) {
+            return null;
+        }
+        return question;
+    }
+
+    @Override
+    public boolean existsByQuestionCode(Long questionCode) {
+        boolean exists;
+        try {
+            exists = questionFeignClient.existsByQuestionCode(questionCode);
         } catch (Exception e) {
             return false;
         }

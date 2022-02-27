@@ -5,6 +5,7 @@ import com.zhopy.buyservice.service.interfaces.IBuyService;
 import com.zhopy.buyservice.utils.exeptions.ApiNotFound;
 import com.zhopy.buyservice.utils.exeptions.ApiUnprocessableEntity;
 import com.zhopy.buyservice.validator.IBuyValidator;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -27,11 +28,13 @@ public class BuyController {
     @Qualifier("BuyValidator")
     private IBuyValidator buyValidator;
 
+    @CircuitBreaker(name = "shoesCB", fallbackMethod = "fallBackFindAll")
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAll() {
         return ResponseEntity.ok(this.buyService.findAll());
     }
 
+    @CircuitBreaker(name = "shoesCB", fallbackMethod = "fallBackFindByBuyNumber")
     @GetMapping(value = "/detail/{buyNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findByBuyNumber(@PathVariable("buyNumber") Long buyNumber) throws ApiNotFound {
         this.buyValidator.validatorById(buyNumber);
@@ -58,5 +61,13 @@ public class BuyController {
         this.buyValidator.validatorById(buyNumber);
         this.buyService.delete(buyNumber);
         return ResponseEntity.ok("La compra se eliminó correctamente");
+    }
+
+    private ResponseEntity<Object> fallBackFindAll(RuntimeException e) {
+        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
+    }
+
+    private ResponseEntity<Object> fallBackFindByBuyCode(@PathVariable("buyNumber") Long buyNumber, RuntimeException e) {
+        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
     }
 }

@@ -17,3 +17,15 @@ spring:
         password: root
         url: jdbc:mysql://localhost/zhoppy?useSSL=false
         username: root
+
+resilience4j.circuitbreaker:
+    instances:
+        shoesCB:
+            registerHealthIndicator: true
+            slidingWindowSize: 10
+            permittedNumberOfCallsInHalfOpenState: 3
+            slidingWindowType: TIME_BASED
+            minimumNumberOfCalls: 4
+            waitDurationInOpenState: 5s
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10

@@ -10,7 +10,7 @@ spring:
           searchPaths: config-data
           username: ${GIT_USER}
           password: ${GIT_PASSWORD}
-          default-label: Balancing-test
+          default-label: master
   security:
     user:
       name: root

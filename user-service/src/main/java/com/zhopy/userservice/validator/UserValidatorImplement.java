@@ -30,6 +30,10 @@ public class UserValidatorImplement implements IUserValidator {
         if (userService.existsByEmail(request.getEmail())) {
             this.message422("El correo ya existe");
         }
+
+        if (request.getPassword() == null || request.getPassword().isBlank()) {
+            this.message422("La contraseña no puede estar vacia");
+        }
     }
 
     @Override
@@ -63,7 +67,7 @@ public class UserValidatorImplement implements IUserValidator {
     }
 
     private void validateDataRegister(UserRequestRegister request) throws ApiUnprocessableEntity {
-        validateData(request.getEmail(), request.getAddress(), request.getPassword(), request.getPhone(), request.getUserName());
+        validateData(request.getEmail(), request.getAddress(), request.getPhone(), request.getUserName());
         if (request.getRoleCode() == null || request.getRoleCode().toString().isBlank()) {
             this.message422("El codigo de rol no puede estar vacio");
         }
@@ -82,18 +86,15 @@ public class UserValidatorImplement implements IUserValidator {
     }
 
     private void validateDataUpdate(UserRequestUpdate request) throws ApiUnprocessableEntity {
-        validateData(request.getEmail(), request.getAddress(), request.getPassword(), request.getPhone(), request.getUserName());
+        validateData(request.getEmail(), request.getAddress(), request.getPhone(), request.getUserName());
     }
 
-    private void validateData(String email, String address, String password, String phone, String userName) throws ApiUnprocessableEntity {
+    private void validateData(String email, String address, String phone, String userName) throws ApiUnprocessableEntity {
         if (email == null || email.isBlank()) {
             this.message422("El correo no puede estar vacio");
         }
         if (address == null || address.isBlank()) {
             this.message422("La direccion no puede estar vacia");
-        }
-        if (password == null || password.isBlank()) {
-            this.message422("La contraseña no puede estar vacia");
         }
         if (phone == null || phone.isBlank()) {
             this.message422("El telefono no puede estar vacio");

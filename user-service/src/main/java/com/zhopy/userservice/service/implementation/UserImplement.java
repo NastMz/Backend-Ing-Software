@@ -91,7 +91,9 @@ public class UserImplement implements IUserService {
         } else {
             user.setPassword(userSearch.get().getPassword());
         }
-
+        user.setRoleCode(userSearch.get().getRoleCode());
+        user.setQuestionCode(userSearch.get().getQuestionCode());
+        user.setSecureAnswer(userSearch.get().getSecureAnswer());
         this.userRepository.save(user);
 
     }

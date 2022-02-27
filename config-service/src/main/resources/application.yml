@@ -8,8 +8,8 @@ spring:
         git:
           uri: https://github.com/NastMz/Backend-Ing-Software.git
           searchPaths: config-data
-          username: ${GIT_USER}
-          password: ${GIT_PASSWORD}
+          username: NastMz
+          password: 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
           default-label: master
   security:
     user:

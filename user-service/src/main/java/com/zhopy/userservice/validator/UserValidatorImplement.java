@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserValidatorImplement implements UserValidator {
+@Qualifier("UserValidator")
+public class UserValidatorImplement implements IUserValidator {
 
     @Autowired
     @Qualifier("UserService")
@@ -76,8 +77,20 @@ public class UserValidatorImplement implements UserValidator {
         if (request.getUserName() == null || request.getUserName().isBlank()) {
             this.message422("El nombre no puede estar vacio");
         }
+        if (request.getRoleCode() == null || request.getRoleCode().toString().isBlank()) {
+            this.message422("El codigo de rol no puede estar vacio");
+        }
         if (!userService.existsByRoleCode(request.getRoleCode())) {
             this.message422("El codigo de rol no existe");
+        }
+        if (request.getQuestionCode() == null || request.getQuestionCode().toString().isBlank()) {
+            this.message422("El codigo de pregunta no puede estar vacio");
+        }
+        if (!userService.existsByQuestionCode(request.getQuestionCode())) {
+            this.message422("El codigo de pregunta no existe");
+        }
+        if (request.getSecureAnswer() == null || request.getSecureAnswer().isBlank()) {
+            this.message422("La repuesta de la pregunta no puede estar vacia");
         }
     }
 

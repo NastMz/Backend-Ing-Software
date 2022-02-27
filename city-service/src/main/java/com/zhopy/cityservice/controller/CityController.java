@@ -4,7 +4,7 @@ import com.zhopy.cityservice.dto.CityRequest;
 import com.zhopy.cityservice.service.interfaces.ICityService;
 import com.zhopy.cityservice.utils.exeptions.ApiNotFound;
 import com.zhopy.cityservice.utils.exeptions.ApiUnprocessableEntity;
-import com.zhopy.cityservice.validator.CityValidator;
+import com.zhopy.cityservice.validator.ICityValidator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -23,8 +23,10 @@ public class CityController {
     @Qualifier("CityService")
     private ICityService cityService;
 
+
     @Autowired
-    private CityValidator cityValidator;
+    @Qualifier("CityValidator")
+    private ICityValidator cityValidator;
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAll() {
@@ -32,7 +34,7 @@ public class CityController {
     }
 
     @GetMapping(value = "/detail/{cityCode}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findByRoleCode(@PathVariable("cityCode") Long cityCode) throws ApiNotFound {
+    public ResponseEntity<Object> findByCityCode(@PathVariable("cityCode") Long cityCode) throws ApiNotFound {
         this.cityValidator.validatorById(cityCode);
         return ResponseEntity.ok(this.cityService.findByCityCode(cityCode));
     }

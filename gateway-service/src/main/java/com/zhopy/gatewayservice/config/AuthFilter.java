@@ -1,12 +1,14 @@
 package com.zhopy.gatewayservice.config;
 
 import com.zhopy.gatewayservice.dto.TokenDTO;
+import com.zhopy.gatewayservice.utils.exceptions.ApiUnauthorized;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -33,14 +35,18 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
             if (chunks.length != 2 || !chunks[0].equals("Bearer")) {
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
-            return webClient.build()
-                    .get()
-                    .uri("http://localhost:8080/oauth/validate?token=" + chunks[1])
-                    .retrieve().bodyToMono(TokenDTO.class)
-                    .map(t -> {
-                        t.getToken();
-                        return exchange;
-                    }).flatMap(chain::filter);
+            try {
+                return webClient.filter(ExchangeFilterFunctions.statusError(HttpStatus::isError, ApiUnauthorized::new)).build()
+                        .get()
+                        .uri("http://localhost:8080/oauth/validate?token=" + chunks[1])
+                        .retrieve().bodyToMono(TokenDTO.class)
+                        .map(t -> {
+                            t.getToken();
+                            return exchange;
+                        }).flatMap(chain::filter);
+            } catch (Exception e) {
+                return onError(exchange, HttpStatus.UNAUTHORIZED);
+            }
         }));
     }
 

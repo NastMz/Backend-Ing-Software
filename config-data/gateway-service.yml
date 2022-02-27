@@ -1,0 +1,87 @@
+server:
+  port: 8080
+  error:
+    include-stacktrace: never
+    include-message: always
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      default-zone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          "[/**]":
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/save
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - AuthFilter
+        - id: role-service
+          uri: lb://role-service
+          predicates:
+            - Path=/api/role/**
+          filters:
+            - AuthFilter
+        - id: auth-jwt-service
+          uri: lb://auth-jwt-service
+          predicates:
+            - Path=/oauth/**
+        - id: city-service
+          uri: lb://city-service
+          predicates:
+            - Path=/api/city/**
+          filters:
+            - AuthFilter
+        - id: shoes-service
+          uri: lb://shoes-service
+          predicates:
+            - Path=/api/shoes/list
+        - id: shoes-service
+          uri: lb://shoes-service
+          predicates:
+            - Path=/api/shoes/detail/**
+        - id: shoes-service
+          uri: lb://shoes-service
+          predicates:
+            - Path=/api/shoes/**
+          filters:
+            - AuthFilter
+        - id: category-service
+          uri: lb://category-service
+          predicates:
+            - Path=/api/category/**
+          filters:
+            - AuthFilter
+        - id: buy-service
+          uri: lb://buy-service
+          predicates:
+            - Path=/api/buy/**
+          filters:
+            - AuthFilter
+        - id: question-service
+          uri: lb://question-service
+          predicates:
+            - Path=/api/question/**
+          filters:
+            - AuthFilter

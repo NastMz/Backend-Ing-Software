@@ -3,6 +3,7 @@ package com.zhopy.userservice.service.interfaces;
 import com.zhopy.userservice.dto.UserDTO;
 import com.zhopy.userservice.dto.UserRequest;
 import com.zhopy.userservice.entity.User;
+import com.zhopy.userservice.model.Question;
 import com.zhopy.userservice.model.Role;
 import org.springframework.stereotype.Service;
 
@@ -29,4 +30,8 @@ public interface IUserService {
     Role findByRoleCode(Long roleCode);
 
     boolean existsByRoleCode(Long roleCode);
+
+    Question findByQuestionCode(Long questionCode);
+
+    boolean existsByQuestionCode(Long questionCode);
 }

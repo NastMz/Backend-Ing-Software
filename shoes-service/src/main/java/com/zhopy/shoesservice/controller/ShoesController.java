@@ -6,7 +6,8 @@ import com.zhopy.shoesservice.service.interfaces.IShoesService;
 import com.zhopy.shoesservice.service.interfaces.IUploadFileService;
 import com.zhopy.shoesservice.utils.exeptions.ApiNotFound;
 import com.zhopy.shoesservice.utils.exeptions.ApiUnprocessableEntity;
-import com.zhopy.shoesservice.validator.ShoesValidator;
+import com.zhopy.shoesservice.validator.IShoesValidator;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -39,14 +40,17 @@ public class ShoesController {
     private IUploadFileService uploadService;
 
     @Autowired
-    private ShoesValidator shoesValidator;
+    @Qualifier("ShoesValidator")
+    private IShoesValidator shoesValidator;
 
+    @CircuitBreaker(name = "userCB", fallbackMethod = "fallBackFindAll")
     @GetMapping(value = "/list", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Object> findAll() throws IOException {
+    public ResponseEntity<Object> findAll() {
         List<ShoesDTO> shoes = this.shoeService.findAll();
         return ResponseEntity.ok(shoes);
     }
 
+    @CircuitBreaker(name = "userCB", fallbackMethod = "fallBackFindByShoeCode")
     @GetMapping(value = "/detail/{shoeCode}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> findByShoeCode(@PathVariable("shoeCode") String shoeCode) throws ApiNotFound, IOException {
         this.shoesValidator.validatorById(shoeCode);
@@ -101,6 +105,14 @@ public class ShoesController {
         File file = new File(route + name);
         InputStream in = new FileInputStream(file);
         return IOUtils.toByteArray(in);
+    }
+
+    private ResponseEntity<Object> fallBackFindAll(RuntimeException e) {
+        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
+    }
+
+    private ResponseEntity<Object> fallBackFindByShoeCode(@PathVariable("shoeCode") String shoeCode, RuntimeException e) {
+        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
     }
 
 }

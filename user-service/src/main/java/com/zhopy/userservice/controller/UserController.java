@@ -9,7 +9,8 @@ import com.zhopy.userservice.utils.exceptions.ApiNotFound;
 import com.zhopy.userservice.utils.exceptions.ApiUnprocessableEntity;
 import com.zhopy.userservice.utils.hash.BCrypt;
 import com.zhopy.userservice.utils.helpers.MapperHelper;
-import com.zhopy.userservice.validator.UserValidator;
+import com.zhopy.userservice.validator.IUserValidator;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -29,13 +30,16 @@ public class UserController {
     private IUserService userService;
 
     @Autowired
-    private UserValidator userValidator;
+    @Qualifier("UserValidator")
+    private IUserValidator userValidator;
 
+    @CircuitBreaker(name = "roleCB", fallbackMethod = "fallBackFindAll")
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAll() {
         return ResponseEntity.ok(this.userService.findAll());
     }
 
+    @CircuitBreaker(name = "roleCB", fallbackMethod = "fallBackFindByUserId")
     @GetMapping(value = "/detail/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findByUserId(@PathVariable("userId") String userId) throws ApiNotFound {
         this.userValidator.validatorById(userId);
@@ -92,6 +96,14 @@ public class UserController {
     public ResponseEntity<Object> existsByUserId(@PathVariable("userId") String userId) throws ApiNotFound {
         this.userValidator.validatorById(userId);
         return ResponseEntity.ok(userService.existsByUserId(userId));
+    }
+
+    private ResponseEntity<Object> fallBackFindAll(RuntimeException e) {
+        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
+    }
+
+    private ResponseEntity<Object> fallBackFindByUserId(@PathVariable("userId") String userId, RuntimeException e) {
+        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
     }
 
 }

@@ -91,12 +91,24 @@ public class ShoesImplement implements IShoesService {
 
     @Override
     public Category findByCategoryCode(Long categoryCode) {
-        return categoryFeignClient.findByCategoryCode(categoryCode);
+        Category category;
+        try {
+            category = categoryFeignClient.findByCategoryCode(categoryCode);
+        } catch (Exception e) {
+            return null;
+        }
+        return category;
     }
 
     @Override
     public boolean existsByCategoryCode(Long categoryCode) {
-        return categoryFeignClient.existsByCategoryCode(categoryCode);
+        boolean exists;
+        try {
+            exists = categoryFeignClient.existsByCategoryCode(categoryCode);
+        } catch (Exception e) {
+            return false;
+        }
+        return exists;
     }
 
 }

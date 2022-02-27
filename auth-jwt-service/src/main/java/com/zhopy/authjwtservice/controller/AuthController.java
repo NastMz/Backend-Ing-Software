@@ -34,14 +34,13 @@ public class AuthController {
     public ResponseEntity<Object> validate(@RequestParam String token) {
         boolean validate = !jwtIO.validateToke(token);
 
-        if (!validate) {
-            return ResponseEntity.badRequest().build();
-        }
-
         TokenDTO tokenDTO = new TokenDTO();
 
-        tokenDTO.setToken(token);
-
+        if (!validate) {
+            tokenDTO.setToken(token);
+        } else {
+            tokenDTO.setToken("");
+        }
         return ResponseEntity.ok(tokenDTO);
     }
 

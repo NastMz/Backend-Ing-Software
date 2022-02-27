@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RoleValidatorImplement implements RoleValidator {
+@Qualifier("RoleValidator")
+public class RoleValidatorImplement implements IRoleValidator {
 
     @Autowired
     @Qualifier("RoleService")

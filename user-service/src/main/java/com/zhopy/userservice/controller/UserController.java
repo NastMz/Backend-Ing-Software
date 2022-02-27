@@ -88,7 +88,7 @@ public class UserController {
         this.userValidator.validatorByEmail(email);
         User user = userService.findByEmail(email);
         UserDTO userDTO = MapperHelper.modelMapper().map(user, UserDTO.class);
-        userDTO.setRoleName(userService.findByRoleCode(user.getRoleCode()).getRoleName());
+        //userDTO.setRoleName(userService.findByRoleCode(user.getRoleCode()).getRoleName());
         return ResponseEntity.ok(userDTO);
     }
 

@@ -12,5 +12,7 @@ public class UserRequest implements Serializable {
     private String password;
     private String address;
     private String phone;
+    private String secureAnswer;
     private Long roleCode;
+    private Long questionCode;
 }

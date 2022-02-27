@@ -27,8 +27,12 @@ public class User implements Serializable {
     private String password;
     @Column(name = "telefono")
     private String phone;
+    @Column(name = "respuesta_segura")
+    private String secureAnswer;
     @Column(name = "codigo_rol")
     private Long roleCode;
+    @Column(name = "codigo_pregunta")
+    private Long questionCode;
     @Column(name = "eliminado")
     private boolean deleted;
 

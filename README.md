@@ -23,6 +23,7 @@
 | `shoes-service`    | `8003` |
 | `category-service` | `8005` |
 | `buy-service`      | `8007` |
+| `question-service` | `8010` |
 | `config-service`   | `8070` |
 | `gateway-service`  | `8080` |
 | `auth-jwt-service` | `8090` |

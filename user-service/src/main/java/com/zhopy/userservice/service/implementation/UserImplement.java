@@ -37,7 +37,7 @@ public class UserImplement implements IUserService {
 
         for (User user : users) {
             UserDTO userDTO = MapperHelper.modelMapper().map(user, UserDTO.class);
-            userDTO.setRoleName(findByRoleCode(user.getRoleCode()).getRoleName());
+            //userDTO.setRoleName(findByRoleCode(user.getRoleCode()).getRoleName());
             dto.add(userDTO);
         }
 
@@ -51,7 +51,7 @@ public class UserImplement implements IUserService {
             return null;
         }
         UserDTO userDTO = MapperHelper.modelMapper().map(user.get(), UserDTO.class);
-        userDTO.setRoleName(findByRoleCode(user.get().getRoleCode()).getRoleName());
+        //userDTO.setRoleName(findByRoleCode(user.get().getRoleCode()).getRoleName());
         return userDTO;
     }
 

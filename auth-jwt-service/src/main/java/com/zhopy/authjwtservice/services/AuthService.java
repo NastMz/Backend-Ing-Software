@@ -37,4 +37,8 @@ public class AuthService {
         return jwtResponse;
     }
 
+    public boolean validatorCredentials(UserValidate userValidate) {
+        return userFeignClient.validatorCredentials(userValidate);
+    }
+
 }

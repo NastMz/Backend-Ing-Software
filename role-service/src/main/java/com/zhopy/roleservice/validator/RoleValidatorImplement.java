@@ -21,7 +21,7 @@ public class RoleValidatorImplement implements IRoleValidator {
     public void validator(RoleRequest request) throws ApiUnprocessableEntity {
         validateData(request);
         if (roleService.existsByRoleName(request.getRoleName())) {
-            this.message422("El nombre ya existe");
+            this.message422("The name already exists");
         }
     }
 
@@ -34,30 +34,30 @@ public class RoleValidatorImplement implements IRoleValidator {
     @Override
     public void validatorById(Long id) throws ApiNotFound {
         if (!roleService.existsByRoleCode(id)) {
-            this.message404("El codigo no existe");
+            this.message404("The code does not exist");
         }
     }
 
     @Override
     public void validatorByIdRequest(Long urlCode, Long roleCode) throws ApiNotFound, ApiUnprocessableEntity {
         if (!roleService.existsByRoleCode(urlCode)) {
-            this.message404("El codigo no existe");
+            this.message404("The code does not exist");
         }
         if (!urlCode.equals(roleCode)) {
-            this.message422("El codigo del cuerpo de la peticion no coincide con el de la uri");
+            this.message422("The request body code does not match the uri code");
         }
     }
 
     private void validateData(RoleRequest request) throws ApiUnprocessableEntity {
         if (request.getRoleName() == null || request.getRoleName().isBlank()) {
-            this.message422("El nombre no puede estar vacio");
+            this.message422("The name cannot be empty");
         }
     }
 
     private void validateName(RoleRequest roleRequest) throws ApiUnprocessableEntity {
         RoleDTO roleSearch = this.roleService.findByRoleCode(roleRequest.getRoleCode());
         if (!roleRequest.getRoleName().equals(roleSearch.getRoleName()) && roleService.existsByRoleName(roleRequest.getRoleName())) {
-            this.message422("El nombre ya existe");
+            this.message422("The name already exists");
         }
     }
 

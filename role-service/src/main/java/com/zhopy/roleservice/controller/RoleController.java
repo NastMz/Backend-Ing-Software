@@ -42,7 +42,7 @@ public class RoleController {
     public ResponseEntity<Object> save(@RequestBody RoleRequest roleRequest) throws ApiUnprocessableEntity {
         this.roleValidator.validator(roleRequest);
         this.roleService.save(roleRequest);
-        return ResponseEntity.ok("El rol se guardo correctamente");
+        return ResponseEntity.ok("The role was saved correctly");
     }
 
     @PutMapping("/update/{roleCode}")
@@ -50,14 +50,14 @@ public class RoleController {
         this.roleValidator.validatorByIdRequest(roleCode, roleRequest.getRoleCode());
         this.roleValidator.validatorUpdate(roleRequest);
         this.roleService.update(roleRequest, roleCode);
-        return ResponseEntity.ok("El rol se actualizo correctamente");
+        return ResponseEntity.ok("The role was updated successfully");
     }
 
     @DeleteMapping("/delete/{roleCode}")
     public ResponseEntity<Object> delete(@PathVariable("roleCode") Long roleCode) throws ApiNotFound {
         this.roleValidator.validatorById(roleCode);
         this.roleService.delete(roleCode);
-        return ResponseEntity.ok("El rol se elimino correctamente");
+        return ResponseEntity.ok("The role was deleted successfully");
     }
 
     @GetMapping("/validate/{roleCode}")

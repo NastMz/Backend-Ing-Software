@@ -43,7 +43,7 @@ public class CityController {
     public ResponseEntity<Object> save(@RequestBody CityRequest cityRequest) throws ApiUnprocessableEntity {
         this.cityValidator.validator(cityRequest);
         this.cityService.save(cityRequest);
-        return ResponseEntity.ok("La ciudad se guardo correctamente");
+        return ResponseEntity.ok("The city was saved correctly");
     }
 
     @PutMapping("/update/{cityCode}")
@@ -51,14 +51,14 @@ public class CityController {
         this.cityValidator.validatorByIdRequest(cityCode, cityRequest.getCityCode());
         this.cityValidator.validatorUpdate(cityRequest);
         this.cityService.update(cityRequest, cityCode);
-        return ResponseEntity.ok("La ciudad se actualizo correctamente");
+        return ResponseEntity.ok("City updated successfully");
     }
 
     @DeleteMapping("/delete/{cityCode}")
     public ResponseEntity<Object> delete(@PathVariable("cityCode") Long codeRole) throws ApiNotFound {
         this.cityValidator.validatorById(codeRole);
         this.cityService.delete(codeRole);
-        return ResponseEntity.ok("La ciudad se borro correctamente");
+        return ResponseEntity.ok("The city was deleted correctly");
     }
 
 }

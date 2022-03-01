@@ -41,7 +41,7 @@ public class CategoryController{
     public ResponseEntity<Object> save(@RequestBody CategoryRequest categoryRequest) throws ApiUnprocessableEntity {
         this.categoryValidator.validator(categoryRequest);
         this.categoryService.save(categoryRequest);
-        return ResponseEntity.ok("La categoria se guardo correctamente");
+        return ResponseEntity.ok("The category was saved correctly");
     }
 
     @PutMapping("/update/{categoryCode}")
@@ -49,14 +49,14 @@ public class CategoryController{
         this.categoryValidator.validatorByIdRequest(categoryCode, categoryRequest.getCategoryCode());
         this.categoryValidator.validatorUpdate(categoryRequest);
         this.categoryService.update(categoryRequest, categoryCode);
-        return ResponseEntity.ok("La categoria se actualizo correctamente");
+        return ResponseEntity.ok("The category was updated successfully");
     }
 
     @DeleteMapping("/delete/{categoryCode}")
     public ResponseEntity<Object> delete(@PathVariable("categoryCode") Long codeCategory) throws ApiNotFound {
         this.categoryValidator.validatorById(codeCategory);
         this.categoryService.delete(codeCategory);
-        return ResponseEntity.ok("La categoria se borro correctamente");
+        return ResponseEntity.ok("The category was deleted correctly");
     }
 
     @GetMapping("/validate/{categoryCode}")

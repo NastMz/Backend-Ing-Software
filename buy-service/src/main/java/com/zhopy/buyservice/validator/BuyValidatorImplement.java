@@ -19,7 +19,7 @@ public class BuyValidatorImplement implements IBuyValidator {
     @Override
     public void validatorById(Long id) throws ApiNotFound {
         if (!buyService.existsByBuyNumber(id)) {
-            this.message404("El numero de compra no existe");
+            this.message404("The purchase number does not exist");
         }
     }
 
@@ -35,24 +35,24 @@ public class BuyValidatorImplement implements IBuyValidator {
 
     private void validateData(BuyRequest request) throws ApiUnprocessableEntity {
         if (request.getTotal() == null) {
-            this.message422("El total no puede estar vacio");
+            this.message422("Total cannot be empty");
         }
         if (request.getTotal() < 0) {
-            this.message422("El total no puede ser menr que cero");
+            this.message422("Total cannot be less than 0");
         }
 
         if (!buyService.existsByUserId(request.getUserId())) {
-            this.message422("El codigo de usuario no existe");
+            this.message422("The user document does not exist");
         }
     }
 
     @Override
     public void validatorByIdRequest(Long urlCode, Long roleCode) throws ApiNotFound, ApiUnprocessableEntity {
         if (!buyService.existsByBuyNumber(urlCode)) {
-            this.message404("El codigo no existe");
+            this.message404("The purchase number does not exist");
         }
         if (!urlCode.equals(roleCode)) {
-            this.message422("El codigo del cuerpo de la peticion no coincide con el de la uri");
+            this.message422("The request body code does not match the uri code");
         }
     }
 

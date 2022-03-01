@@ -22,7 +22,7 @@ public class CityValidatorImplement implements ICityValidator {
     public void validator(CityRequest request) throws ApiUnprocessableEntity {
         validateData(request);
         if (cityService.existsByCityName(request.getCityName())) {
-            this.message422("El nombre ya existe");
+            this.message422("The name already exists");
         }
     }
 
@@ -35,30 +35,30 @@ public class CityValidatorImplement implements ICityValidator {
     @Override
     public void validatorById(Long id) throws ApiNotFound {
         if (!cityService.existsByCityCode(id)) {
-            this.message404("El codigo no existe");
+            this.message404("The code does not exist");
         }
     }
 
     @Override
     public void validatorByIdRequest(Long urlCode, Long roleCode) throws ApiNotFound, ApiUnprocessableEntity {
         if (!cityService.existsByCityCode(urlCode)) {
-            this.message404("El codigo no existe");
+            this.message404("The code does not exist");
         }
         if (!urlCode.equals(roleCode)) {
-            this.message422("El codigo del cuerpo de la peticion no coincide con el de la uri");
+            this.message422("The request body code does not match the uri code");
         }
     }
 
     private void validateData(CityRequest request) throws ApiUnprocessableEntity {
         if (request.getCityName() == null || request.getCityName().isBlank()) {
-            this.message422("El nombre no puede estar vacio");
+            this.message422("The name cannot be empty");
         }
     }
 
     private void validateName(CityRequest roleRequest) throws ApiUnprocessableEntity {
         CityDTO citySearch = this.cityService.findByCityCode(roleRequest.getCityCode());
         if (!roleRequest.getCityName().equals(citySearch.getCityName()) && cityService.existsByCityName(roleRequest.getCityName())) {
-            this.message422("El nombre ya existe");
+            this.message422("The name already exists");
         }
     }
 

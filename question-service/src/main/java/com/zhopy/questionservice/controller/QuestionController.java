@@ -42,7 +42,7 @@ public class QuestionController {
     public ResponseEntity<Object> save(@RequestBody QuestionRequest questionRequest) throws ApiUnprocessableEntity {
         this.questionValidator.validator(questionRequest);
         this.questionService.save(questionRequest);
-        return ResponseEntity.ok("La pregunta se guardo correctamente");
+        return ResponseEntity.ok("The question was saved correctly");
     }
 
     @PutMapping("/update/{questionCode}")
@@ -50,14 +50,14 @@ public class QuestionController {
         this.questionValidator.validatorByIdRequest(questionCode, questionRequest.getQuestionCode());
         this.questionValidator.validatorUpdate(questionRequest);
         this.questionService.update(questionRequest, questionCode);
-        return ResponseEntity.ok("La pregunta se actualizo correctamente");
+        return ResponseEntity.ok("The question was updated successfully");
     }
 
     @DeleteMapping("/delete/{questionCode}")
     public ResponseEntity<Object> delete(@PathVariable("questionCode") Long questionCode) throws ApiNotFound {
         this.questionValidator.validatorById(questionCode);
         this.questionService.delete(questionCode);
-        return ResponseEntity.ok("La pregunta se elimino correctamente");
+        return ResponseEntity.ok("The question was deleted successfully");
     }
 
     @GetMapping("/validate/{questionCode}")

@@ -5,6 +5,7 @@ import com.zhopy.authjwtservice.exceptions.ApiUnauthorized;
 import com.zhopy.authjwtservice.security.JwtIO;
 import com.zhopy.authjwtservice.services.AuthService;
 import com.zhopy.authjwtservice.validator.AuthValidator;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class AuthController {
     @Autowired
     private JwtIO jwtIO;
 
+    @CircuitBreaker(name = "userCB", fallbackMethod = "fallBackLogin")
     @PostMapping(path = "/client_credential/accesstoken", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> login(@RequestBody MultiValueMap<String, String> paramMap, @RequestParam("grant_type") String grantType) throws ApiUnauthorized {
         validator.validate(paramMap, grantType);
@@ -55,6 +57,10 @@ public class AuthController {
         String payload = jwtIO.getPayload(token);
 
         return ResponseEntity.ok(payload);
+    }
+
+    private ResponseEntity<Object> fallBackLogin(@RequestBody MultiValueMap<String, String> paramMap, @RequestParam("grant_type") String grantType, RuntimeException e) throws ApiUnauthorized {
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
     }
 
 

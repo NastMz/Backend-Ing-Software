@@ -1,8 +1,8 @@
 package com.zhopy.authjwtservice.validator;
 
 import com.zhopy.authjwtservice.exceptions.ApiUnauthorized;
-import com.zhopy.authjwtservice.feignclients.UserFeignClient;
 import com.zhopy.authjwtservice.model.UserValidate;
+import com.zhopy.authjwtservice.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
@@ -13,26 +13,26 @@ import java.util.Objects;
 public class AuthValidator {
 
     @Autowired
-    UserFeignClient userFeignClient;
+    AuthService authService;
 
     private static final String CLIENT_CREDENTIALS = "client_credentials";
 
     public void validate(MultiValueMap<String, String> paramMap, String grantType) throws ApiUnauthorized {
         if (grantType.isEmpty() || !grantType.equals(CLIENT_CREDENTIALS)) {
-            message("El campo grant_type es invalido");
+            message("The grant_type field is invalid");
         }
 
         if (Objects.isNull(paramMap) || paramMap.getFirst("email").isEmpty() || paramMap.getFirst("password").isEmpty()) {
-            message("client_id y/o client_secret son invalidos");
+            message("client_id and/or client_secret are invalid");
         }
 
         UserValidate userValidate = new UserValidate(paramMap.getFirst("email"), paramMap.getFirst("password"));
         try {
-            if (!userFeignClient.validatorCredentials(userValidate)) {
-                message("Credenciales no validas");
+            if (!authService.validatorCredentials(userValidate)) {
+                message("Invalid credentials");
             }
         } catch (Exception e) {
-            message("Credenciales no validas");
+            message("Invalid credentials");
         }
 
     }

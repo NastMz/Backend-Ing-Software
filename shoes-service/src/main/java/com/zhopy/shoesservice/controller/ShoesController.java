@@ -43,14 +43,14 @@ public class ShoesController {
     @Qualifier("ShoesValidator")
     private IShoesValidator shoesValidator;
 
-    @CircuitBreaker(name = "userCB", fallbackMethod = "fallBackFindAll")
+    @CircuitBreaker(name = "categoryCB", fallbackMethod = "fallBackFindAll")
     @GetMapping(value = "/list", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> findAll() {
         List<ShoesDTO> shoes = this.shoeService.findAll();
         return ResponseEntity.ok(shoes);
     }
 
-    @CircuitBreaker(name = "userCB", fallbackMethod = "fallBackFindByShoeCode")
+    @CircuitBreaker(name = "categoryCB", fallbackMethod = "fallBackFindByShoeCode")
     @GetMapping(value = "/detail/{shoeCode}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> findByShoeCode(@PathVariable("shoeCode") String shoeCode) throws ApiNotFound, IOException {
         this.shoesValidator.validatorById(shoeCode);
@@ -58,6 +58,7 @@ public class ShoesController {
         return ResponseEntity.ok(shoe);
     }
 
+    @CircuitBreaker(name = "categoryCB", fallbackMethod = "fallBackSave")
     @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> save(@RequestPart ShoesRequest shoesRequest, @RequestPart(required = false) MultipartFile image) throws ApiUnprocessableEntity, IOException {
         this.shoesValidator.validator(shoesRequest);
@@ -68,7 +69,7 @@ public class ShoesController {
         shoesRequest.setImageBytes(imageBytes);
 
         this.shoeService.save(shoesRequest);
-        return ResponseEntity.ok("Los zapatos se guardaron correctamente");
+        return ResponseEntity.ok("The shoes were stored correctly");
     }
 
     @PutMapping(value = "/update/{shoeCode}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
@@ -88,14 +89,14 @@ public class ShoesController {
         }
 
         this.shoeService.update(shoesRequest, shoeCode);
-        return ResponseEntity.ok("Los zapatos se actualizaron correctamente");
+        return ResponseEntity.ok("Shoes updated successfully");
     }
 
     @DeleteMapping("/delete/{shoeCode}")
     public ResponseEntity<Object> delete(@PathVariable("shoeCode") String shoeCode) throws ApiNotFound {
         this.shoesValidator.validatorById(shoeCode);
         this.shoeService.delete(shoeCode);
-        return ResponseEntity.ok("Los zapatos se eliminaron correctamente");
+        return ResponseEntity.ok("The shoes were removed successfully");
     }
 
     @GetMapping(value = "/getImage/{name}", produces = MediaType.IMAGE_JPEG_VALUE)
@@ -108,11 +109,15 @@ public class ShoesController {
     }
 
     private ResponseEntity<Object> fallBackFindAll(RuntimeException e) {
-        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
     }
 
     private ResponseEntity<Object> fallBackFindByShoeCode(@PathVariable("shoeCode") String shoeCode, RuntimeException e) {
-        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+    }
+
+    private ResponseEntity<Object> fallBackSave(@RequestPart ShoesRequest shoesRequest, @RequestPart(required = false) MultipartFile image, RuntimeException e) {
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
     }
 
 }

@@ -34,30 +34,30 @@ public class CategoryValidatorImplement implements ICategoryValidator {
     @Override
     public void validatorById(Long id) throws ApiNotFound {
         if (!categoryService.existsByCategoryCode(id)) {
-            this.message404("El codigo no existe");
+            this.message404("The code does not exist");
         }
     }
 
     @Override
     public void validatorByIdRequest(Long urlCode, Long roleCode) throws ApiNotFound, ApiUnprocessableEntity {
         if (!categoryService.existsByCategoryCode(urlCode)) {
-            this.message404("El codigo no existe");
+            this.message404("The code does not exist");
         }
         if (!urlCode.equals(roleCode)) {
-            this.message422("El codigo del cuerpo de la peticion no coincide con el de la uri");
+            this.message422("The request body code does not match the uri code");
         }
     }
 
     private void validateData(CategoryRequest request) throws ApiUnprocessableEntity {
         if (request.getCategoryName() == null || request.getCategoryName().isBlank()) {
-            this.message422("El nombre no puede estar vacio");
+            this.message422("The name cannot be empty");
         }
     }
 
     private void validateName(CategoryRequest roleRequest) throws ApiUnprocessableEntity {
         CategoryDTO categorySearch = this.categoryService.findByCategoryCode(roleRequest.getCategoryCode());
         if (!roleRequest.getCategoryName().equals(categorySearch.getCategoryName()) && categoryService.existsByCategoryName(roleRequest.getCategoryName())) {
-            this.message422("El nombre ya existe");
+            this.message422("The name already exists");
         }
     }
 

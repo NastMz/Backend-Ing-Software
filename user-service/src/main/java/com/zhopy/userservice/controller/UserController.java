@@ -34,39 +34,40 @@ public class UserController {
     @Qualifier("UserValidator")
     private IUserValidator userValidator;
 
-    @CircuitBreaker(name = "roleCB", fallbackMethod = "fallBackFindAll")
+
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAll() {
         return ResponseEntity.ok(this.userService.findAll());
     }
 
-    @CircuitBreaker(name = "roleCB", fallbackMethod = "fallBackFindByUserId")
     @GetMapping(value = "/detail/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findByUserId(@PathVariable("userId") String userId) throws ApiNotFound {
         this.userValidator.validatorById(userId);
         return ResponseEntity.ok(this.userService.findByUserId(userId));
     }
 
+    @CircuitBreaker(name = "roleCB", fallbackMethod = "fallBackSave")
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> save(@RequestBody UserRequestRegister userRequestRegister) throws ApiUnprocessableEntity {
         this.userValidator.validator(userRequestRegister);
         this.userService.save(userRequestRegister);
-        return ResponseEntity.ok("El usuario se guardo correctamente");
+        return ResponseEntity.ok("User saved successfully");
     }
 
+    @CircuitBreaker(name = "roleCB", fallbackMethod = "fallBackUpdate")
     @PutMapping("/update/{userId}")
     public ResponseEntity<Object> update(@PathVariable("userId") String userId, @RequestBody UserRequestUpdate userRequestUpdate) throws ApiNotFound, ApiUnprocessableEntity {
         this.userValidator.validatorByIdRequest(userId, userRequestUpdate.getUserId());
         this.userValidator.validatorUpdate(userRequestUpdate);
         this.userService.update(userRequestUpdate, userId);
-        return ResponseEntity.ok("El usuario se actualizo correctamente");
+        return ResponseEntity.ok("The user was successfully updated");
     }
 
     @DeleteMapping(value = "/delete/{userId}")
     public ResponseEntity<Object> delete(@PathVariable("userId") String userId) throws ApiNotFound {
         this.userValidator.validatorById(userId);
         this.userService.delete(userId);
-        return ResponseEntity.ok("El usuario se elimino correctamente");
+        return ResponseEntity.ok("The user was deleted successfully");
     }
 
     @PostMapping(value = "/validate", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -99,12 +100,12 @@ public class UserController {
         return ResponseEntity.ok(userService.existsByUserId(userId));
     }
 
-    private ResponseEntity<Object> fallBackFindAll(RuntimeException e) {
-        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
+    private ResponseEntity<Object> fallBackSave(@RequestBody UserRequestRegister userRequestRegister, RuntimeException e) {
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
     }
 
-    private ResponseEntity<Object> fallBackFindByUserId(@PathVariable("userId") String userId, RuntimeException e) {
-        return ResponseEntity.ok("No fue posible realizar peticion, perdone las molestias");
+    private ResponseEntity<Object> fallBackUpdate(@PathVariable("userId") String userId, @RequestBody UserRequestUpdate userRequestUpdate, RuntimeException e) {
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
     }
 
 }

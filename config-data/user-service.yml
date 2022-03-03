@@ -19,6 +19,10 @@ spring:
         password: root
         url: jdbc:mysql://localhost/zhoppy?useSSL=false
         username: root
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MariaDB103Dialect
 
 resilience4j.circuitbreaker:
     instances:

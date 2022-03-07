@@ -82,6 +82,12 @@ spring:
         - id: question-service
           uri: lb://question-service
           predicates:
+            - Path=/api/question/list
+          filters:
+            - AuthFilter
+        - id: question-service
+          uri: lb://question-service
+          predicates:
             - Path=/api/question/**
           filters:
             - AuthFilter

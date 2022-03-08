@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 @OpenAPIDefinition(info = @Info(title = "Zhopy", description = "user-service controller", version = "v1", license = @License(name = "", url = "")))
@@ -98,19 +99,19 @@ public class UserController {
         return ResponseEntity.ok(userService.existsByUserId(userId));
     }
 
-    @GetMapping("/check/email")
-    public ResponseEntity<Object> checkEmail(@RequestParam String email) throws ApiUnprocessableEntity, ApiNotFound {
+    @PostMapping(value = "/check/email", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<Object> checkEmail(@RequestBody String email) throws ApiUnprocessableEntity, ApiNotFound {
         this.userValidator.validatorByEmail(email);
         return ResponseEntity.ok("The user is registered");
     }
 
-    @GetMapping("/check/answer")
-    public ResponseEntity<Object> checkAnswer(@RequestParam String email, @RequestParam String secureAnswer) throws ApiUnprocessableEntity, ApiUnauthorized, ApiNotFound {
-        this.userValidator.validatorSecureAnswer(email, secureAnswer);
+    @PostMapping(value = "/check/answer", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<Object> checkAnswer(@RequestBody MultiValueMap<String, String> paramMap) throws ApiUnprocessableEntity, ApiUnauthorized, ApiNotFound {
+        this.userValidator.validatorSecureAnswer(paramMap.getFirst("email"), paramMap.getFirst("secureAnswer"));
         return ResponseEntity.ok("The answer is correct");
     }
 
-    @PutMapping("/restore")
+    @PutMapping(value = "/restore", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> recovery(@RequestBody UserRestore userRestore) throws ApiNotFound, ApiUnprocessableEntity, ApiUnauthorized {
         this.userValidator.validatorRestore(userRestore);
         this.userService.restore(userRestore);

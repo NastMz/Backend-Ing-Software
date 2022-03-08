@@ -34,6 +34,14 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
+            - Path=/api/user/check/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/restore
+        - id: user-service
+          uri: lb://user-service
+          predicates:
             - Path=/api/user/**
           filters:
             - AuthFilter

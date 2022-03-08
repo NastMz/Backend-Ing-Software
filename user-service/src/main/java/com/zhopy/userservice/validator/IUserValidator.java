@@ -2,7 +2,9 @@ package com.zhopy.userservice.validator;
 
 import com.zhopy.userservice.dto.UserRequestRegister;
 import com.zhopy.userservice.dto.UserRequestUpdate;
+import com.zhopy.userservice.dto.UserRestore;
 import com.zhopy.userservice.utils.exceptions.ApiNotFound;
+import com.zhopy.userservice.utils.exceptions.ApiUnauthorized;
 import com.zhopy.userservice.utils.exceptions.ApiUnprocessableEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +19,9 @@ public interface IUserValidator {
 
     void validatorByIdRequest(String urlId, String userId) throws ApiNotFound, ApiUnprocessableEntity;
 
-    void validatorByEmail(String email) throws ApiNotFound;
+    void validatorByEmail(String email) throws ApiNotFound, ApiUnprocessableEntity;
+
+    void validatorSecureAnswer(String email, String secureAnswer) throws ApiUnauthorized, ApiUnprocessableEntity, ApiNotFound;
+
+    void validatorRestore(UserRestore userRestore) throws ApiUnauthorized, ApiUnprocessableEntity, ApiNotFound;
 }

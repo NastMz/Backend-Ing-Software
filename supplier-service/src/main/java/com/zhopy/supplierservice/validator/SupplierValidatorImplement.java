@@ -50,10 +50,13 @@ public class SupplierValidatorImplement implements ISupplierValidator {
     }
 
     private void validateData(SupplierRequest request) throws ApiUnprocessableEntity {
+        if (request.getSupplierNit() == null || StringUtils.isBlank(request.getSupplierNit())) {
+            this.message422("The nit cannot be empty");
+        }
         if (request.getSupplierName() == null || StringUtils.isBlank(request.getSupplierName())) {
             this.message422("The name cannot be empty");
         }
-        if (request.getCityCode() == null) {
+        if (request.getCityCode() == null || StringUtils.isBlank(request.getCityCode().toString())) {
             this.message422("The city code cannot be empty");
         }
         if (!supplierService.existsByCityCode(request.getCityCode())) {

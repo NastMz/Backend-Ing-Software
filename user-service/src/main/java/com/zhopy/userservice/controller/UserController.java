@@ -1,12 +1,10 @@
 package com.zhopy.userservice.controller;
 
-import com.zhopy.userservice.dto.UserDTO;
-import com.zhopy.userservice.dto.UserRequestRegister;
-import com.zhopy.userservice.dto.UserRequestUpdate;
-import com.zhopy.userservice.dto.UserValidate;
+import com.zhopy.userservice.dto.*;
 import com.zhopy.userservice.entity.User;
 import com.zhopy.userservice.service.interfaces.IUserService;
 import com.zhopy.userservice.utils.exceptions.ApiNotFound;
+import com.zhopy.userservice.utils.exceptions.ApiUnauthorized;
 import com.zhopy.userservice.utils.exceptions.ApiUnprocessableEntity;
 import com.zhopy.userservice.utils.hash.BCrypt;
 import com.zhopy.userservice.utils.helpers.MapperHelper;
@@ -71,7 +69,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/validate", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> validatorCredentials(@RequestBody UserValidate userValidate) throws ApiNotFound {
+    public ResponseEntity<Object> validatorCredentials(@RequestBody UserValidate userValidate) throws ApiNotFound, ApiUnprocessableEntity {
         boolean auth = false;
         String email = userValidate.getEmail();
         this.userValidator.validatorByEmail(email);
@@ -85,7 +83,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findByEmail(@RequestBody UserValidate userValidate) throws ApiNotFound {
+    public ResponseEntity<Object> findByEmail(@RequestBody UserValidate userValidate) throws ApiNotFound, ApiUnprocessableEntity {
         String email = userValidate.getEmail();
         this.userValidator.validatorByEmail(email);
         User user = userService.findByEmail(email);
@@ -98,6 +96,25 @@ public class UserController {
     public ResponseEntity<Object> existsByUserId(@PathVariable("userId") String userId) throws ApiNotFound {
         this.userValidator.validatorById(userId);
         return ResponseEntity.ok(userService.existsByUserId(userId));
+    }
+
+    @GetMapping("/check/email")
+    public ResponseEntity<Object> checkEmail(@RequestParam String email) throws ApiUnprocessableEntity, ApiNotFound {
+        this.userValidator.validatorByEmail(email);
+        return ResponseEntity.ok("The user is registered");
+    }
+
+    @GetMapping("/check/answer")
+    public ResponseEntity<Object> checkAnswer(@RequestParam String email, @RequestParam String secureAnswer) throws ApiUnprocessableEntity, ApiUnauthorized, ApiNotFound {
+        this.userValidator.validatorSecureAnswer(email, secureAnswer);
+        return ResponseEntity.ok("The answer is correct");
+    }
+
+    @PutMapping("/restore")
+    public ResponseEntity<Object> recovery(@RequestBody UserRestore userRestore) throws ApiNotFound, ApiUnprocessableEntity, ApiUnauthorized {
+        this.userValidator.validatorRestore(userRestore);
+        this.userService.restore(userRestore);
+        return ResponseEntity.ok("The password was successfully restored");
     }
 
     private ResponseEntity<Object> fallBackSave(@RequestBody UserRequestRegister userRequestRegister, RuntimeException e) {

@@ -3,8 +3,11 @@ package com.zhopy.userservice.validator;
 import com.zhopy.userservice.dto.UserDTO;
 import com.zhopy.userservice.dto.UserRequestRegister;
 import com.zhopy.userservice.dto.UserRequestUpdate;
+import com.zhopy.userservice.dto.UserRestore;
+import com.zhopy.userservice.entity.User;
 import com.zhopy.userservice.service.interfaces.IUserService;
 import com.zhopy.userservice.utils.exceptions.ApiNotFound;
+import com.zhopy.userservice.utils.exceptions.ApiUnauthorized;
 import com.zhopy.userservice.utils.exceptions.ApiUnprocessableEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,9 +72,32 @@ public class UserValidatorImplement implements IUserValidator {
     }
 
     @Override
-    public void validatorByEmail(String email) throws ApiNotFound {
+    public void validatorByEmail(String email) throws ApiNotFound, ApiUnprocessableEntity {
+        if (email == null || StringUtils.isBlank(email)) {
+            this.message422("The email cannot be empty");
+        }
         if (!userService.existsByEmail(email)) {
             this.message404("The email is not registered");
+        }
+    }
+
+    @Override
+    public void validatorSecureAnswer(String email, String secureAnswer) throws ApiUnauthorized, ApiUnprocessableEntity, ApiNotFound {
+        validatorByEmail(email);
+        User user = userService.findByEmail(email);
+        if (secureAnswer == null || StringUtils.isBlank(secureAnswer)) {
+            this.message422("The answer cannot be empty");
+        }
+        if (!user.getSecureAnswer().equals(secureAnswer)) {
+            this.message401("The answer to the security question is not correct");
+        }
+    }
+
+    @Override
+    public void validatorRestore(UserRestore userRestore) throws ApiUnauthorized, ApiUnprocessableEntity, ApiNotFound {
+        validatorSecureAnswer(userRestore.getEmail(), userRestore.getSecureAnswer());
+        if (userRestore.getNewPassword() == null || StringUtils.isBlank(userRestore.getNewPassword())) {
+            this.message422("The new password cannot be empty");
         }
     }
 
@@ -127,5 +153,9 @@ public class UserValidatorImplement implements IUserValidator {
 
     private void message404(String message) throws ApiNotFound {
         throw new ApiNotFound(message);
+    }
+
+    private void message401(String message) throws ApiUnauthorized {
+        throw new ApiUnauthorized(message);
     }
 }

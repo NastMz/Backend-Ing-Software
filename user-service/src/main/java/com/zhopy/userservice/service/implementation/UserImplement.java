@@ -3,6 +3,7 @@ package com.zhopy.userservice.service.implementation;
 import com.zhopy.userservice.dto.UserDTO;
 import com.zhopy.userservice.dto.UserRequestRegister;
 import com.zhopy.userservice.dto.UserRequestUpdate;
+import com.zhopy.userservice.dto.UserRestore;
 import com.zhopy.userservice.entity.User;
 import com.zhopy.userservice.feignclients.QuestionFeignClient;
 import com.zhopy.userservice.feignclients.RoleFeignClient;
@@ -152,6 +153,16 @@ public class UserImplement implements IUserService {
         }
 
         return exists;
+    }
+
+    @Override
+    public void restore(UserRestore userRestore) {
+        Optional<User> userSearch = this.userRepository.findByEmail(userRestore.getEmail());
+        if (userSearch.isPresent()) {
+            User user = userSearch.get();
+            user.setPassword(BCrypt.hashpw(userRestore.getNewPassword(), BCrypt.gensalt()));
+            this.userRepository.save(user);
+        }
     }
 
 }

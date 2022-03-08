@@ -3,6 +3,7 @@ package com.zhopy.userservice.service.interfaces;
 import com.zhopy.userservice.dto.UserDTO;
 import com.zhopy.userservice.dto.UserRequestRegister;
 import com.zhopy.userservice.dto.UserRequestUpdate;
+import com.zhopy.userservice.dto.UserRestore;
 import com.zhopy.userservice.entity.User;
 import com.zhopy.userservice.model.Question;
 import com.zhopy.userservice.model.Role;
@@ -35,4 +36,6 @@ public interface IUserService {
     Question findByQuestionCode(Long questionCode);
 
     boolean existsByQuestionCode(Long questionCode);
+
+    void restore(UserRestore userRestore);
 }

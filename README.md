@@ -3,13 +3,16 @@
 - [TOKEN](#token)
     * [Para generar un token](#para-generar-un-token)
     * [Para hacer peticiones](#para-hacer-peticiones)
-- [PUERTOS DE LOS SERVICIOS](#puertos-de-los-servicios)
 - [GATEWAY](#gateway)
     * [Archivo `aplication.yml`](#archivo--aplicationyml-)
     * [Agregar servicios al gateway](#agregar-servicios-al-gateway)
 - [IMAGENES ZAPATOS](#imagenes-zapatos)
     * [Para subir una imagen](#para-subir-una-imagen)
     * [Para mostrar una imagen](#para-mostrar-una-imagen)
+- [RESTABLECER CONTRASEÑA](#restablecer-contraseña)
+  * [Para validar email](#para-validar-email)
+  * [Para validar respuesta](#para-validar-respuesta)
+  * [Para restablecer contraseña](#para-restablecer-contraseña)
 
 # PUERTOS
 
@@ -17,16 +20,8 @@
 
 | Servicio           | Puerto |
 |--------------------|--------|
-| `user-service`     | `8000` |
-| `role-service`     | `8001` |
-| `city-service`     | `8002` |
-| `shoes-service`    | `8003` |
-| `category-service` | `8005` |
-| `buy-service`      | `8007` |
-| `question-service` | `8010` |
 | `config-service`   | `8070` |
 | `gateway-service`  | `8080` |
-| `auth-jwt-service` | `8090` |
 | `eureka-service`   | `8761` |
 
 # URIs
@@ -102,30 +97,6 @@ async function cargarJson() {
 
 cargarJson();
 
-```
-
-# PUERTOS DE LOS SERVICIOS
-
-----
-
-Para asignarle un puerto especifico a los servicios, se debe hacer en el archivo `aplication.properties` que se
-encuentra en la ruta `\src\main\resources` de cada servicio.
-
-Los parametros son:
-
-```properties
- server.port=8000
-spring.application.name=user-service
-```
-
-En este archivo tambien se encuentran los parametros de la base de datos.
-
-```properties
-spring.datasource.url=jdbc:mysql://localhost/zhopy?useSSL=false
-spring.datasource.dbname=zhopy
-spring.datasource.username=______
-spring.datasource.password=_____
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 ```
 
 # GATEWAY
@@ -347,14 +318,15 @@ function clickBtnAgregar() {
     //se obtiene la imagen que se subio
     var input = document.querySelector('input[type="file"]');
 
-    // El objeto se debe convertir a JSON ya que la peticion no acepta este formato
+    // El objeto se debe convertir a JSON ya que la peticion va a estar en otro formato
+    // que va a contener a este JSON
     const json = JSON.stringify(shoe);
     const blob = new Blob([json], {
         type: "application/json",
     });
 
     // Se crea el cuerpo de la peticion de tipo multipart/form-data
-    // y se añaden el objeto y la imagen 
+    // y se añaden el JSON y la imagen 
     // (los nombres de los campos deben ser "shoesRequest" y "image" obligatoriamente)
     let formData = new FormData();
     formData.append("shoesRequest", blob);
@@ -474,5 +446,97 @@ async function iniciar() {
     container.innerHTML = returnCards(shoes);
 }
 
+
+```
+
+# RESTABLECER CONTRASEÑA
+
+----
+> `/api/user/check/email` *Verificar si esta registrado el email*
+
+> `/api/user/check/answer` *Verificar si la respuesta coincide con la del email registrado*
+
+> `/api/user/restore` *Restablece la contraseña*
+
+
+## Para validar email
+
+```javascript
+var details = {
+    'email': 'test@gmail.com',
+};
+
+var formBody = [];
+for (var property in details) {
+    var encodedKey = encodeURIComponent(property);
+    var encodedValue = encodeURIComponent(details[property]);
+    formBody.push(encodedKey + "=" + encodedValue);
+}
+formBody = formBody.join("&");
+
+fetch('http://localhost:8080/api/user/check/email', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    body: formBody
+});
+
+```
+
+## Para validar respuesta
+
+```javascript
+var details = {
+    'email': 'test@gmail.com',
+    'secureAnswer': 'respuesta',
+};
+
+var formBody = [];
+for (var property in details) {
+    var encodedKey = encodeURIComponent(property);
+    var encodedValue = encodeURIComponent(details[property]);
+    formBody.push(encodedKey + "=" + encodedValue);
+}
+formBody = formBody.join("&");
+
+fetch('http://localhost:8080/api/user/check/answer', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    body: formBody
+});
+
+```
+
+## Para restablecer contraseña
+
+```javascript
+
+let userRestore = {
+  'email': 'test@gmail.com',
+  'secureAnswer': 'respuesta',
+  'newPassword': 'password',
+}
+
+async function cargarUrl(url) {
+  let response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(userRestore)
+  });
+  return response.json();
+}
+
+async function cargarJson() {
+  let json = await cargarUrl("http://localhost:8080/api/user/restore");
+
+  console.log(json);
+}
+
+cargarJson();
 
 ```

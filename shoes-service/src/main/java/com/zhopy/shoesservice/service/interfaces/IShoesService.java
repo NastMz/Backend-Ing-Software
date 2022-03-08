@@ -3,6 +3,7 @@ package com.zhopy.shoesservice.service.interfaces;
 import com.zhopy.shoesservice.dto.ShoesDTO;
 import com.zhopy.shoesservice.dto.ShoesRequest;
 import com.zhopy.shoesservice.model.Category;
+import com.zhopy.shoesservice.model.Supplier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,4 +29,8 @@ public interface IShoesService {
     Category findByCategoryCode(Long categoryCode);
 
     boolean existsByCategoryCode(Long categoryCode);
+
+    Supplier findBySupplierNit(String supplierNit);
+
+    boolean existsBySupplierNit(String supplierNit);
 }

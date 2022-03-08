@@ -14,5 +14,5 @@ public interface ICategoryValidator {
 
     void validatorUpdate(CategoryRequest request) throws ApiUnprocessableEntity;
 
-    void validatorByIdRequest(Long urlCode, Long roleCode) throws ApiNotFound, ApiUnprocessableEntity;
+    void validatorByIdRequest(Long urlCode, Long categoryCode) throws ApiNotFound, ApiUnprocessableEntity;
 }

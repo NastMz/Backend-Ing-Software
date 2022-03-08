@@ -1,4 +1,4 @@
-package com.zhopy.shoesservice.entity;
+package com.zhopy.supplierservice.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
@@ -16,11 +16,11 @@ public class Supplier implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nit_proveedor")
-    private Long supplierNit;
+    private String supplierNit;
     @Column(name = "nombre_proveedor")
     private String supplierName;
     @Column(name = "direccion_proveedor")
-    private String address;
+    private String supplierAddress;
     @Column(name = "telefono")
     private String phone;
     @Column(name = "codigo_ciudad")

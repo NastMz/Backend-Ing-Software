@@ -21,7 +21,7 @@ public class CategoryValidatorImplement implements ICategoryValidator {
     public void validator(CategoryRequest request) throws ApiUnprocessableEntity {
         validateData(request);
         if (categoryService.existsByCategoryName(request.getCategoryName())) {
-            this.message422("El nombre ya existe");
+            this.message422("The name already exists");
         }
     }
 

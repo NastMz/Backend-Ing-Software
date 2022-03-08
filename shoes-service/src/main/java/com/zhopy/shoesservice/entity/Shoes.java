@@ -31,7 +31,7 @@ public class Shoes implements Serializable {
     @Column(name = "codigo_categoria")
     private Long categoryCode;
     @Column(name = "nit_proveedor")
-    private Long supplierNit;
+    private String supplierNit;
     @Column(name = "eliminado")
     private boolean deleted;
 

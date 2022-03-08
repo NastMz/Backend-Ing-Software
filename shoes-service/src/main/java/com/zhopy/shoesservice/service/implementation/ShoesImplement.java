@@ -4,7 +4,9 @@ import com.zhopy.shoesservice.dto.ShoesDTO;
 import com.zhopy.shoesservice.dto.ShoesRequest;
 import com.zhopy.shoesservice.entity.Shoes;
 import com.zhopy.shoesservice.feignclients.CategoryFeignClient;
+import com.zhopy.shoesservice.feignclients.SupplierFeignClient;
 import com.zhopy.shoesservice.model.Category;
+import com.zhopy.shoesservice.model.Supplier;
 import com.zhopy.shoesservice.repository.ShoesRepository;
 import com.zhopy.shoesservice.service.interfaces.IShoesService;
 import com.zhopy.shoesservice.utils.helpers.MapperHelper;
@@ -28,6 +30,9 @@ public class ShoesImplement implements IShoesService {
     @Autowired
     private CategoryFeignClient categoryFeignClient;
 
+    @Autowired
+    private SupplierFeignClient supplierFeignClient;
+
     @Override
     public List<ShoesDTO> findAll() {
         List<ShoesDTO> dto = new ArrayList<>();
@@ -36,6 +41,7 @@ public class ShoesImplement implements IShoesService {
         for (Shoes shoe : shoes) {
             ShoesDTO shoesDTO = MapperHelper.modelMapper().map(shoe, ShoesDTO.class);
             shoesDTO.setCategoryName(findByCategoryCode(shoe.getCategoryCode()).getCategoryName());
+            shoesDTO.setSupplierName(findBySupplierNit(shoe.getSupplierNit()).getSupplierName());
             dto.add(shoesDTO);
         }
 
@@ -50,6 +56,7 @@ public class ShoesImplement implements IShoesService {
         }
         ShoesDTO shoesDTO = MapperHelper.modelMapper().map(shoe.get(), ShoesDTO.class);
         shoesDTO.setCategoryName(findByCategoryCode(shoe.get().getCategoryCode()).getCategoryName());
+        shoesDTO.setSupplierName(findBySupplierNit(shoe.get().getSupplierNit()).getSupplierName());
         return shoesDTO;
     }
 
@@ -59,6 +66,7 @@ public class ShoesImplement implements IShoesService {
         if (shoe.isPresent()) {
             return null;
         }
+
         return MapperHelper.modelMapper().map(shoe, ShoesDTO.class);
     }
 
@@ -105,6 +113,28 @@ public class ShoesImplement implements IShoesService {
         boolean exists;
         try {
             exists = categoryFeignClient.existsByCategoryCode(categoryCode);
+        } catch (Exception e) {
+            return false;
+        }
+        return exists;
+    }
+
+    @Override
+    public Supplier findBySupplierNit(String supplierNit) {
+        Supplier supplier;
+        try {
+            supplier = supplierFeignClient.findBySupplierNit(supplierNit);
+        } catch (Exception e) {
+            return null;
+        }
+        return supplier;
+    }
+
+    @Override
+    public boolean existsBySupplierNit(String supplierNit) {
+        boolean exists;
+        try {
+            exists = supplierFeignClient.existsBySupplierNit(supplierNit);
         } catch (Exception e) {
             return false;
         }

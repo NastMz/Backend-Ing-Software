@@ -89,3 +89,9 @@ spring:
             - Path=/api/question/**
           filters:
             - AuthFilter
+        - id: supplier-service
+          uri: lb://supplier-service
+          predicates:
+            - Path=/api/supplier/**
+          filters:
+            - AuthFilter

@@ -14,5 +14,5 @@ public class ShoesRequest implements Serializable {
     private String imageName;
     private byte[] imageBytes;
     private Long categoryCode;
-    private Long supplierNit;
+    private String supplierNit;
 }

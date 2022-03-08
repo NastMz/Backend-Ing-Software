@@ -43,14 +43,14 @@ public class ShoesController {
     @Qualifier("ShoesValidator")
     private IShoesValidator shoesValidator;
 
-    @CircuitBreaker(name = "categoryCB", fallbackMethod = "fallBackFindAll")
+    @CircuitBreaker(name = "category_supplierCB", fallbackMethod = "fallBackFindAll")
     @GetMapping(value = "/list", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> findAll() {
         List<ShoesDTO> shoes = this.shoeService.findAll();
         return ResponseEntity.ok(shoes);
     }
 
-    @CircuitBreaker(name = "categoryCB", fallbackMethod = "fallBackFindByShoeCode")
+    @CircuitBreaker(name = "category_supplierCB", fallbackMethod = "fallBackFindByShoeCode")
     @GetMapping(value = "/detail/{shoeCode}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> findByShoeCode(@PathVariable("shoeCode") String shoeCode) throws ApiNotFound, IOException {
         this.shoesValidator.validatorById(shoeCode);
@@ -58,7 +58,7 @@ public class ShoesController {
         return ResponseEntity.ok(shoe);
     }
 
-    @CircuitBreaker(name = "categoryCB", fallbackMethod = "fallBackSave")
+    @CircuitBreaker(name = "category_supplierCB", fallbackMethod = "fallBackSave")
     @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Object> save(@RequestPart ShoesRequest shoesRequest, @RequestPart(required = false) MultipartFile image) throws ApiUnprocessableEntity, IOException {
         this.shoesValidator.validator(shoesRequest);

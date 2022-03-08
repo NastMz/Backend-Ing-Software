@@ -3,7 +3,6 @@ package com.zhopy.shoesservice.validator;
 import com.zhopy.shoesservice.dto.ShoesDTO;
 import com.zhopy.shoesservice.dto.ShoesRequest;
 import com.zhopy.shoesservice.service.interfaces.IShoesService;
-import com.zhopy.shoesservice.service.interfaces.ISupplierService;
 import com.zhopy.shoesservice.utils.exeptions.ApiNotFound;
 import com.zhopy.shoesservice.utils.exeptions.ApiUnprocessableEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +73,7 @@ public class ShoesValidatorImplement implements IShoesValidator {
         if (!shoeService.existsByCategoryCode(request.getCategoryCode())) {
             this.message422("The category does not exist");
         }
-        if (!supplierService.existsBySupplierNit(request.getSupplierNit())) {
+        if (!shoeService.existsBySupplierNit(request.getSupplierNit())) {
             this.message422("The supplier does not exist");
         }
     }

@@ -61,4 +61,9 @@ public class CityController {
         return ResponseEntity.ok("The city was deleted correctly");
     }
 
+    @GetMapping("/validate/{cityCode}")
+    boolean existsByCityCode(@PathVariable("cityCode") Long cityCode) {
+        return cityService.existsByCityCode(cityCode);
+    }
+
 }

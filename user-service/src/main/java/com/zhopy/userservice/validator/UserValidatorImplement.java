@@ -6,6 +6,7 @@ import com.zhopy.userservice.dto.UserRequestUpdate;
 import com.zhopy.userservice.service.interfaces.IUserService;
 import com.zhopy.userservice.utils.exceptions.ApiNotFound;
 import com.zhopy.userservice.utils.exceptions.ApiUnprocessableEntity;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class UserValidatorImplement implements IUserValidator {
 
     @Override
     public void validator(UserRequestRegister request) throws ApiUnprocessableEntity {
-        if (request.getUserId() == null || request.getUserId().isBlank()) {
+        if (request.getUserId() == null || StringUtils.isBlank(request.getUserId())) {
             this.message422("The document cannot be empty");
         }
         if (request.getUserId().length() != 10) {
@@ -33,7 +34,7 @@ public class UserValidatorImplement implements IUserValidator {
         if (userService.existsByEmail(request.getEmail())) {
             this.message422("The email is already registered");
         }
-        if (request.getPassword() == null || request.getPassword().isBlank()) {
+        if (request.getPassword() == null || request.getPassword())){
             this.message422("Password cannot be empty");
         }
         if (request.getPassword().length() < 8) {
@@ -76,19 +77,19 @@ public class UserValidatorImplement implements IUserValidator {
 
     private void validateDataRegister(UserRequestRegister request) throws ApiUnprocessableEntity {
         validateData(request.getEmail(), request.getAddress(), request.getPhone(), request.getUserName());
-        if (request.getRoleCode() == null || request.getRoleCode().toString().isBlank()) {
+        if (request.getRoleCode() == null || StringUtils.isBlank(request.getRoleCode().toString())) {
             this.message422("The role cannot be empty");
         }
         if (!userService.existsByRoleCode(request.getRoleCode())) {
             this.message422("Role does not exist");
         }
-        if (request.getQuestionCode() == null || request.getQuestionCode().toString().isBlank()) {
+        if (request.getQuestionCode() == null || StringUtils.isBlank(request.getQuestionCode().toString())) {
             this.message422("The question cannot be empty");
         }
         if (!userService.existsByQuestionCode(request.getQuestionCode())) {
             this.message422("Question does not exist");
         }
-        if (request.getSecureAnswer() == null || request.getSecureAnswer().isBlank()) {
+        if (request.getSecureAnswer() == null || StringUtils.isBlank(request.getSecureAnswer())) {
             this.message422("The answer of the question cannot be empty");
         }
     }
@@ -98,16 +99,16 @@ public class UserValidatorImplement implements IUserValidator {
     }
 
     private void validateData(String email, String address, String phone, String userName) throws ApiUnprocessableEntity {
-        if (email == null || email.isBlank()) {
+        if (email == null || StringUtils.isBlank(email)) {
             this.message422("The email cannot be empty");
         }
-        if (address == null || address.isBlank()) {
+        if (address == null || StringUtils.isBlank(address)) {
             this.message422("The address cannot be empty");
         }
-        if (phone == null || phone.isBlank()) {
+        if (phone == null || StringUtils.isBlank(phone)) {
             this.message422("The phone cannot be empty");
         }
-        if (userName == null || userName.isBlank()) {
+        if (userName == null || StringUtils.isBlank(userName)) {
             this.message422("The name cannot be empty");
         }
     }

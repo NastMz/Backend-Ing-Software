@@ -6,6 +6,7 @@ import com.zhopy.cityservice.dto.CityRequest;
 import com.zhopy.cityservice.service.interfaces.ICityService;
 import com.zhopy.cityservice.utils.exeptions.ApiNotFound;
 import com.zhopy.cityservice.utils.exeptions.ApiUnprocessableEntity;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -50,7 +51,7 @@ public class CityValidatorImplement implements ICityValidator {
     }
 
     private void validateData(CityRequest request) throws ApiUnprocessableEntity {
-        if (request.getCityName() == null || request.getCityName().isBlank()) {
+        if (request.getCityName() == null || StringUtils.isBlank(request.getCityName())) {
             this.message422("The name cannot be empty");
         }
     }

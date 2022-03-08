@@ -5,6 +5,7 @@ import com.zhopy.supplierservice.dto.SupplierRequest;
 import com.zhopy.supplierservice.service.interfaces.ISupplierService;
 import com.zhopy.supplierservice.utils.exeptions.ApiNotFound;
 import com.zhopy.supplierservice.utils.exeptions.ApiUnprocessableEntity;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,7 @@ public class SupplierValidatorImplement implements ISupplierValidator {
     }
 
     private void validateData(SupplierRequest request) throws ApiUnprocessableEntity {
-        if (request.getSupplierName() == null || request.getSupplierName().isBlank()) {
+        if (request.getSupplierName() == null || StringUtils.isBlank(request.getSupplierName())) {
             this.message422("The name cannot be empty");
         }
         if (request.getCityCode() == null) {

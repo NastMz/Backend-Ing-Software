@@ -5,6 +5,7 @@ import com.zhopy.categoryservice.dto.CategoryRequest;
 import com.zhopy.categoryservice.service.interfaces.ICategoryService;
 import com.zhopy.categoryservice.utils.exeptions.ApiNotFound;
 import com.zhopy.categoryservice.utils.exeptions.ApiUnprocessableEntity;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,7 @@ public class CategoryValidatorImplement implements ICategoryValidator {
     }
 
     private void validateData(CategoryRequest request) throws ApiUnprocessableEntity {
-        if (request.getCategoryName() == null || request.getCategoryName().isBlank()) {
+        if (request.getCategoryName() == null || StringUtils.isBlank(request.getCategoryName())) {
             this.message422("The name cannot be empty");
         }
     }

@@ -5,6 +5,7 @@ import com.zhopy.shoesservice.dto.ShoesRequest;
 import com.zhopy.shoesservice.service.interfaces.IShoesService;
 import com.zhopy.shoesservice.utils.exeptions.ApiNotFound;
 import com.zhopy.shoesservice.utils.exeptions.ApiUnprocessableEntity;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -17,12 +18,9 @@ public class ShoesValidatorImplement implements IShoesValidator {
     @Qualifier("ShoesService")
     private IShoesService shoeService;
 
-    @Autowired
-    private ISupplierService supplierService;
-
     @Override
     public void validator(ShoesRequest request) throws ApiUnprocessableEntity {
-        if (request.getShoeCode() == null || request.getShoeCode().isBlank()) {
+        if (request.getShoeCode() == null || request.getShoeCode())){
             this.message422("The code cannot be empty");
         }
         validateData(request);
@@ -58,16 +56,16 @@ public class ShoesValidatorImplement implements IShoesValidator {
     }
 
     private void validateData(ShoesRequest request) throws ApiUnprocessableEntity {
-        if (request.getShoeName() == null || request.getShoeName().isBlank()) {
+        if (request.getShoeName() == null || StringUtils.isBlank(request.getShoeName())) {
             this.message422("The name cannot be empty");
         }
-        if (request.getPrice() == null || request.getPrice().isBlank()) {
+        if (request.getPrice() == null || StringUtils.isBlank(request.getPrice())) {
             this.message422("The price cannot be empty");
         }
-        if (request.getStock() == null || request.getStock().isBlank()) {
+        if (request.getStock() == null || StringUtils.isBlank(request.getStock())) {
             this.message422("The stock cannot be empty");
         }
-        if (request.getDescription() == null || request.getDescription().isBlank()) {
+        if (request.getDescription() == null || StringUtils.isBlank(request.getDescription())) {
             this.message422("The description cannot be empty");
         }
         if (!shoeService.existsByCategoryCode(request.getCategoryCode())) {

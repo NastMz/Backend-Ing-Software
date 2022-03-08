@@ -5,6 +5,7 @@ import com.zhopy.questionservice.dto.QuestionRequest;
 import com.zhopy.questionservice.service.interfaces.IQuestionService;
 import com.zhopy.questionservice.utils.exeptions.ApiNotFound;
 import com.zhopy.questionservice.utils.exeptions.ApiUnprocessableEntity;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,7 @@ public class QuestionValidatorImplement implements IQuestionValidator {
     }
 
     private void validateData(QuestionRequest request) throws ApiUnprocessableEntity {
-        if (request.getQuestion() == null || request.getQuestion().isBlank()) {
+        if (request.getQuestion() == null || StringUtils.isBlank(request.getQuestion())) {
             this.message422("La pregunta no puede estar vacia");
         }
     }

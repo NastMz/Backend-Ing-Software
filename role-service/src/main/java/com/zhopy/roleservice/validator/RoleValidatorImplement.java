@@ -5,6 +5,7 @@ import com.zhopy.roleservice.dto.RoleRequest;
 import com.zhopy.roleservice.service.interfaces.IRoleService;
 import com.zhopy.roleservice.utils.exeptions.ApiNotFound;
 import com.zhopy.roleservice.utils.exeptions.ApiUnprocessableEntity;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,7 @@ public class RoleValidatorImplement implements IRoleValidator {
     }
 
     private void validateData(RoleRequest request) throws ApiUnprocessableEntity {
-        if (request.getRoleName() == null || request.getRoleName().isBlank()) {
+        if (request.getRoleName() == null || StringUtils.isBlank(request.getRoleName())) {
             this.message422("The name cannot be empty");
         }
     }

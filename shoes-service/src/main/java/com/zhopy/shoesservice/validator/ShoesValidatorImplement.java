@@ -20,7 +20,7 @@ public class ShoesValidatorImplement implements IShoesValidator {
 
     @Override
     public void validator(ShoesRequest request) throws ApiUnprocessableEntity {
-        if (request.getShoeCode() == null || request.getShoeCode())){
+        if (request.getShoeCode() == null || StringUtils.isBlank(request.getShoeCode())) {
             this.message422("The code cannot be empty");
         }
         validateData(request);

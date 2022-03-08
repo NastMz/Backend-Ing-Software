@@ -33,7 +33,7 @@ public class SupplierImplement implements ISupplierService {
 
         for (Supplier supplier : categories) {
             SupplierDTO supplierDTO = MapperHelper.modelMapper().map(supplier, SupplierDTO.class);
-            supplierDTO.setSupplierNit(cityFeignClient.findByCityCode(supplier.getCityCode()).getCityName());
+            supplierDTO.setCityName(cityFeignClient.findByCityCode(supplier.getCityCode()).getCityName());
             dto.add(supplierDTO);
         }
 
@@ -47,7 +47,7 @@ public class SupplierImplement implements ISupplierService {
             return null;
         }
         SupplierDTO supplierDTO = MapperHelper.modelMapper().map(supplier.get(), SupplierDTO.class);
-        supplierDTO.setSupplierNit(cityFeignClient.findByCityCode(supplier.get().getCityCode()).getCityName());
+        supplierDTO.setCityName(cityFeignClient.findByCityCode(supplier.get().getCityCode()).getCityName());
         return supplierDTO;
     }
 

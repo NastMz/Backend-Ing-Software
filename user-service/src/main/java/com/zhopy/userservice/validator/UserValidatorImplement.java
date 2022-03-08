@@ -34,7 +34,7 @@ public class UserValidatorImplement implements IUserValidator {
         if (userService.existsByEmail(request.getEmail())) {
             this.message422("The email is already registered");
         }
-        if (request.getPassword() == null || request.getPassword())){
+        if (request.getPassword() == null || StringUtils.isBlank(request.getPassword())) {
             this.message422("Password cannot be empty");
         }
         if (request.getPassword().length() < 8) {

@@ -1,0 +1,33 @@
+server:
+    error:
+        include-message: always
+        include-stacktrace: never
+    port: ${PORT:${SERVER_PORT:0}}
+eureka:
+    client:
+        fetch-registry: true
+        register-with-eureka: true
+        service-url:
+            default-zone: http://localhost:8761/eureka
+    instance:
+        instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+spring:
+    application:
+        zipkin: http://localhost:9411
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: root
+        url: jdbc:mysql://localhost/zhoppy?useSSL=false
+        username: root
+
+resilience4j.circuitbreaker:
+    instances:
+        user_status_buyCB:
+            registerHealthIndicator: true
+            slidingWindowSize: 10
+            permittedNumberOfCallsInHalfOpenState: 3
+            slidingWindowType: TIME_BASED
+            minimumNumberOfCalls: 4
+            waitDurationInOpenState: 5s
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10

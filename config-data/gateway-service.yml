@@ -103,3 +103,21 @@ spring:
             - Path=/api/supplier/**
           filters:
             - AuthFilter
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - AuthFilter
+        - id: status-service
+          uri: lb://status-service
+          predicates:
+            - Path=/api/status/**
+          filters:
+            - AuthFilter
+        - id: shoesbought-service
+          uri: lb://shoesbought-service
+          predicates:
+            - Path=/api/shoesbought/**
+          filters:
+            - AuthFilter

@@ -3,7 +3,11 @@ package com.zhopy.buyservice.service.implementation;
 import com.zhopy.buyservice.dto.BuyDTO;
 import com.zhopy.buyservice.dto.BuyRequest;
 import com.zhopy.buyservice.entity.Buy;
+import com.zhopy.buyservice.feignclients.ShoesBoughtFeignClient;
+import com.zhopy.buyservice.feignclients.ShoesFeignClient;
 import com.zhopy.buyservice.feignclients.UserFeignClient;
+import com.zhopy.buyservice.model.ShoesBought;
+import com.zhopy.buyservice.model.ShoesBoughtRequests;
 import com.zhopy.buyservice.repository.BuyRepository;
 import com.zhopy.buyservice.service.interfaces.IBuyService;
 import com.zhopy.buyservice.utils.helpers.MapperHelper;
@@ -27,14 +31,20 @@ public class BuyImplement implements IBuyService {
     @Autowired
     private UserFeignClient userFeignClient;
 
+    @Autowired
+    private ShoesBoughtFeignClient shoesBoughtFeignClient;
+
+    @Autowired
+    private ShoesFeignClient shoesFeignClient;
+
     @Override
     public List<BuyDTO> findAll() {
         List<BuyDTO> dto = new ArrayList<>();
-        Iterable<Buy> compras = this.buyRepository.findAll();
+        Iterable<Buy> buys = buyRepository.findAll();
 
-        for (Buy buy : compras) {
-            BuyDTO comprasDTO = MapperHelper.modelMapper().map(buy, BuyDTO.class);
-            dto.add(comprasDTO);
+        for (Buy buy : buys) {
+            BuyDTO buyDTO = MapperHelper.modelMapper().map(buy, BuyDTO.class);
+            dto.add(buyDTO);
         }
 
         return dto;
@@ -42,7 +52,7 @@ public class BuyImplement implements IBuyService {
 
     @Override
     public BuyDTO findByBuyNumber(Long buyNumber) {
-        Optional<Buy> buy = this.buyRepository.findById(buyNumber);
+        Optional<Buy> buy = buyRepository.findById(buyNumber);
         if (!buy.isPresent()) {
             return null;
         }
@@ -50,16 +60,32 @@ public class BuyImplement implements IBuyService {
     }
 
     @Override
-    public void save(BuyRequest buyRequest) {
+    public Long save(BuyRequest buyRequest) {
         Buy buy = MapperHelper.modelMapper().map(buyRequest, Buy.class);
-        this.buyRepository.save(buy);
+        return buyRepository.save(buy).getBuyNumber();
+    }
+
+    @Override
+    public void saveShoes(List<ShoesBought> list, Long buyNumber) {
+        ShoesBoughtRequests shoesRequest = new ShoesBoughtRequests();
+        List<ShoesBought> shoesList = new ArrayList<>();
+        for (ShoesBought shoe : list) {
+            shoe.setBuyNumber(buyNumber);
+            shoesList.add(shoe);
+        }
+        shoesRequest.setShoesList(shoesList);
+        try {
+            shoesBoughtFeignClient.save(shoesRequest);
+        } catch (Exception e) {
+
+        }
+
     }
 
     @Override
     public void update(BuyRequest buyRequest, Long buyNumber) {
         Buy buy = MapperHelper.modelMapper().map(buyRequest, Buy.class);
         this.buyRepository.save(buy);
-
     }
 
     @Override
@@ -71,6 +97,12 @@ public class BuyImplement implements IBuyService {
     public boolean existsByBuyNumber(Long buyNumber) {
         return buyRepository.existsByBuyNumber(buyNumber);
     }
+
+    @Override
+    public boolean existsByShoeCode(String shoeCode) {
+        return shoesFeignClient.existsByShoeCode(shoeCode);
+    }
+
 
     @Override
     public boolean existsByUserId(String userId) {

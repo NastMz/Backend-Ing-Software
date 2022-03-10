@@ -108,16 +108,21 @@ public class ShoesController {
         return IOUtils.toByteArray(in);
     }
 
+    @PostMapping("/exists/{shoeCode}")
+    public ResponseEntity<Object> existsByShoeCode(@PathVariable("shoeCode") String shoeCode) throws ApiNotFound {
+        return ResponseEntity.ok(shoeService.existsByShoeCode(shoeCode));
+    }
+
     private ResponseEntity<Object> fallBackFindAll(RuntimeException e) {
-        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 
     private ResponseEntity<Object> fallBackFindByShoeCode(@PathVariable("shoeCode") String shoeCode, RuntimeException e) {
-        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 
     private ResponseEntity<Object> fallBackSave(@RequestPart ShoesRequest shoesRequest, @RequestPart(required = false) MultipartFile image, RuntimeException e) {
-        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 
 }

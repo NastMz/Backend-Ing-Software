@@ -1,5 +1,6 @@
 package com.zhopy.buyservice.dto;
 
+import com.zhopy.buyservice.model.ShoesBought;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,5 +13,5 @@ public class BuyRequest implements Serializable {
     private Long total;
     private Date buyDate;
     private String userId;
-    private List<String> shoesList;
+    private List<ShoesBought> shoesList;
 }

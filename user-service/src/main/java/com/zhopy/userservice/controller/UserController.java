@@ -95,7 +95,6 @@ public class UserController {
 
     @PostMapping("/exists/{userId}")
     public ResponseEntity<Object> existsByUserId(@PathVariable("userId") String userId) throws ApiNotFound {
-        this.userValidator.validatorById(userId);
         return ResponseEntity.ok(userService.existsByUserId(userId));
     }
 
@@ -119,11 +118,11 @@ public class UserController {
     }
 
     private ResponseEntity<Object> fallBackSave(@RequestBody UserRequestRegister userRequestRegister, RuntimeException e) {
-        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 
     private ResponseEntity<Object> fallBackUpdate(@PathVariable("userId") String userId, @RequestBody UserRequestUpdate userRequestUpdate, RuntimeException e) {
-        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 
 }

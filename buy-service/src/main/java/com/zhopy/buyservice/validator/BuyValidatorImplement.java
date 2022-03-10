@@ -1,9 +1,11 @@
 package com.zhopy.buyservice.validator;
 
 import com.zhopy.buyservice.dto.BuyRequest;
+import com.zhopy.buyservice.model.ShoesBought;
 import com.zhopy.buyservice.service.interfaces.IBuyService;
 import com.zhopy.buyservice.utils.exeptions.ApiNotFound;
 import com.zhopy.buyservice.utils.exeptions.ApiUnprocessableEntity;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -43,6 +45,16 @@ public class BuyValidatorImplement implements IBuyValidator {
 
         if (!buyService.existsByUserId(request.getUserId())) {
             this.message422("The user document does not exist");
+        }
+
+        Iterable<ShoesBought> shoes = request.getShoesList();
+        for (ShoesBought shoe : shoes) {
+            if (shoe.getShoeCode() == null || StringUtils.isBlank(shoe.getShoeCode())) {
+                this.message422("The shoe code cannot be empty");
+            }
+            if (!buyService.existsByShoeCode(shoe.getShoeCode())) {
+                this.message422("The shoe code " + shoe.getShoeCode() + " does not exist");
+            }
         }
     }
 

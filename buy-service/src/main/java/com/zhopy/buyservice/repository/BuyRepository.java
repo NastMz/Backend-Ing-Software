@@ -13,4 +13,6 @@ public interface BuyRepository extends CrudRepository<Buy, Long> {
     Optional<Buy> findByBuyNumber(Long buyNumber);
 
     boolean existsByBuyNumber(Long buyNumber);
+
+    Optional<Buy> findByUserId(String userId);
 }

@@ -68,11 +68,11 @@ public class SupplierController {
     }
 
     private ResponseEntity<Object> fallBackFindAll(RuntimeException e) {
-        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 
     private ResponseEntity<Object> fallBackFindBySupplierNit(@PathVariable("shoeCode") String shoeCode, RuntimeException e) {
-        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 
 }

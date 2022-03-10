@@ -62,7 +62,6 @@ public class QuestionController {
 
     @GetMapping("/validate/{questionCode}")
     public ResponseEntity<Object> existsByQuestionCode(@PathVariable("questionCode") Long questionCode) throws ApiNotFound {
-        this.questionValidator.validatorById(questionCode);
         return ResponseEntity.ok(questionService.existsByQuestionCode(questionCode));
     }
 

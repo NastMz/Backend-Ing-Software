@@ -62,7 +62,6 @@ public class RoleController {
 
     @GetMapping("/validate/{roleCode}")
     public ResponseEntity<Object> existsByRoleCode(@PathVariable("roleCode") Long roleCode) throws ApiNotFound {
-        this.roleValidator.validatorById(roleCode);
         return ResponseEntity.ok(roleService.existsByRoleCode(roleCode));
     }
 

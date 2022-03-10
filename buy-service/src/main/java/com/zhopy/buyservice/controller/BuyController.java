@@ -40,11 +40,12 @@ public class BuyController {
         return ResponseEntity.ok(this.buyService.findByBuyNumber(buyNumber));
     }
 
-    @CircuitBreaker(name = "userCB", fallbackMethod = "fallBackSave")
+    @CircuitBreaker(name = "user_shoesCB", fallbackMethod = "fallBackSave")
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> save(@RequestBody BuyRequest buyRequest) throws ApiUnprocessableEntity {
         this.buyValidator.validator(buyRequest);
-        this.buyService.save(buyRequest);
+        Long buyNumber = this.buyService.save(buyRequest);
+        this.buyService.saveShoes(buyRequest.getShoesList(), buyNumber);
         return ResponseEntity.ok("The purchase was saved successfully");
     }
 
@@ -64,11 +65,16 @@ public class BuyController {
         return ResponseEntity.ok("The purchase was successfully deleted");
     }
 
+    @PostMapping("/exists/{buyNumber}")
+    public ResponseEntity<Object> existsByBuyNumber(@PathVariable("buyNumber") Long buyNumber) throws ApiNotFound {
+        return ResponseEntity.ok(buyService.existsByBuyNumber(buyNumber));
+    }
+
     private ResponseEntity<Object> fallBackSave(@RequestBody BuyRequest buyRequest, RuntimeException e) {
-        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 
     private ResponseEntity<Object> fallBackSave(@PathVariable("buyNumber") Long buyNumber, @RequestBody BuyRequest buyRequest, RuntimeException e) {
-        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem");
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 }

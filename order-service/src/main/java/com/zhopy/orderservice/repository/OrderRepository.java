@@ -1,0 +1,16 @@
+package com.zhopy.orderservice.repository;
+
+import com.zhopy.orderservice.entity.Order;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+@Repository
+public interface OrderRepository extends CrudRepository<Order, Long> {
+    @Transactional(readOnly = true)
+    Optional<Order> findByOrderNumber(Long orderNumber);
+
+    boolean existsByOrderNumber(Long orderNumber);
+}

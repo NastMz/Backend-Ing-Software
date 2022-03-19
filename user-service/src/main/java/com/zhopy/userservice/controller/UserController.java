@@ -89,18 +89,17 @@ public class UserController {
         this.userValidator.validatorByEmail(email);
         User user = userService.findByEmail(email);
         UserDTO userDTO = MapperHelper.modelMapper().map(user, UserDTO.class);
-        //userDTO.setRoleName(userService.findByRoleCode(user.getRoleCode()).getRoleName());
         return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping("/exists/{userId}")
-    public ResponseEntity<Object> existsByUserId(@PathVariable("userId") String userId) throws ApiNotFound {
+    public ResponseEntity<Object> existsByUserId(@PathVariable("userId") String userId) {
         return ResponseEntity.ok(userService.existsByUserId(userId));
     }
 
     @PostMapping(value = "/check/email", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<Object> checkEmail(@RequestBody String email) throws ApiUnprocessableEntity, ApiNotFound {
-        this.userValidator.validatorByEmail(email);
+    public ResponseEntity<Object> checkEmail(@RequestBody MultiValueMap<String, String> paramMap) throws ApiUnprocessableEntity, ApiNotFound {
+        this.userValidator.validatorByEmail(paramMap.getFirst("email"));
         return ResponseEntity.ok("The user is registered");
     }
 

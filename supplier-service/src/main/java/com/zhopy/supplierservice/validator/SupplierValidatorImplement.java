@@ -20,6 +20,9 @@ public class SupplierValidatorImplement implements ISupplierValidator {
 
     @Override
     public void validator(SupplierRequest request) throws ApiUnprocessableEntity {
+        if (supplierService.existsBySupplierNit(request.getSupplierNit())) {
+            this.message422("The Nit already exists");
+        }
         validateData(request);
         if (supplierService.existsBySupplierName(request.getSupplierName())) {
             this.message422("The name already exists");

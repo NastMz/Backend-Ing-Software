@@ -14,7 +14,6 @@ import java.io.Serializable;
 @Where(clause = "eliminado = false")
 public class Supplier implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nit_proveedor")
     private String supplierNit;
     @Column(name = "nombre_proveedor")

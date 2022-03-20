@@ -26,6 +26,8 @@ jms:
             path: "/oauth/validate,/api/user/save,/oauth/getPayload"
 
 spring:
+    application:
+        zipkin: http://localhost:9411
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: root

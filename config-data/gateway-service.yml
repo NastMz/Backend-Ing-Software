@@ -13,6 +13,8 @@ eureka:
     hostname: localhost
 
 spring:
+  application:
+    zipkin: http://localhost:9411
   cloud:
     gateway:
       default-filters:
@@ -119,5 +121,11 @@ spring:
           uri: lb://shoesbought-service
           predicates:
             - Path=/api/shoesbought/**
+          filters:
+            - AuthFilter
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/payment/**
           filters:
             - AuthFilter

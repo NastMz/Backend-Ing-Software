@@ -8,6 +8,6 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class ApiUnauthorized extends Exception {
     public ApiUnauthorized(ClientResponse clientResponse) {
-        super("Invalid and/or expired token\n Please try to sign in again");
+        super("Invalid and/or expired token. Please try to sign in again");
     }
 }

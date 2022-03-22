@@ -2,6 +2,7 @@ package com.zhopy.userservice.controller;
 
 import com.zhopy.userservice.dto.*;
 import com.zhopy.userservice.entity.User;
+import com.zhopy.userservice.model.Question;
 import com.zhopy.userservice.service.interfaces.IUserService;
 import com.zhopy.userservice.utils.exceptions.ApiNotFound;
 import com.zhopy.userservice.utils.exceptions.ApiUnauthorized;
@@ -97,10 +98,14 @@ public class UserController {
         return ResponseEntity.ok(userService.existsByUserId(userId));
     }
 
-    @PostMapping(value = "/check/email", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @CircuitBreaker(name = "questionCB", fallbackMethod = "fallBackCheckEmail")
+    @PostMapping(value = "/check/email", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> checkEmail(@RequestBody MultiValueMap<String, String> paramMap) throws ApiUnprocessableEntity, ApiNotFound {
-        this.userValidator.validatorByEmail(paramMap.getFirst("email"));
-        return ResponseEntity.ok("The user is registered");
+        String email = paramMap.getFirst("email");
+        this.userValidator.validatorByEmail(email);
+        User user = userService.findByEmail(email);
+        Question question = userService.getQuestion(user.getQuestionCode());
+        return ResponseEntity.ok(question.getQuestion());
     }
 
     @PostMapping(value = "/check/answer", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -121,6 +126,10 @@ public class UserController {
     }
 
     private ResponseEntity<Object> fallBackUpdate(@PathVariable("userId") String userId, @RequestBody UserRequestUpdate userRequestUpdate, RuntimeException e) {
+        return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
+    }
+
+    private ResponseEntity<Object> fallBackCheckEmail(@RequestBody MultiValueMap<String, String> paramMap, RuntimeException e) {
         return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 

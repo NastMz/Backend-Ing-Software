@@ -133,10 +133,10 @@ public class UserImplement implements IUserService {
     }
 
     @Override
-    public Question findByQuestionCode(Long questionCode) {
+    public Question getQuestion(Long questionCode) {
         Question question;
         try {
-            question = questionFeignClient.findByQuestionCode(questionCode);
+            question = MapperHelper.modelMapper().map(questionFeignClient.getQuestion(questionCode), Question.class);
         } catch (Exception e) {
             return null;
         }

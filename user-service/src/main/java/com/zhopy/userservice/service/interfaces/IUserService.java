@@ -33,7 +33,7 @@ public interface IUserService {
 
     boolean existsByRoleCode(Long roleCode);
 
-    Question findByQuestionCode(Long questionCode);
+    Question getQuestion(Long questionCode);
 
     boolean existsByQuestionCode(Long questionCode);
 

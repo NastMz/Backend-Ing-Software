@@ -65,4 +65,10 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.existsByQuestionCode(questionCode));
     }
 
+    @PostMapping(value = "/get/{questionCode}")
+    public ResponseEntity<Object> getQuestion(@PathVariable("questionCode") Long questionCode) throws ApiNotFound {
+        this.questionValidator.validatorById(questionCode);
+        return ResponseEntity.ok(this.questionService.findByQuestionCode(questionCode));
+    }
+
 }

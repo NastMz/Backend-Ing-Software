@@ -25,4 +25,6 @@ public interface IOrderService {
     boolean existsByStatusCode(Long statusCode);
 
     boolean existsByUserId(String userId);
+
+    List<OrderDTO> findAllByUserId(String userId);
 }

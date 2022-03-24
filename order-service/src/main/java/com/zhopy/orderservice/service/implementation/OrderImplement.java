@@ -113,4 +113,19 @@ public class OrderImplement implements IOrderService {
         return exists;
     }
 
+    @Override
+    public List<OrderDTO> findAllByUserId(String userId) {
+        List<OrderDTO> dto = new ArrayList<>();
+        Iterable<Order> orders = this.orderRepository.findAll();
+
+        for (Order order : orders) {
+            if (order.getUserId().equals(userId)) {
+                OrderDTO orderDTO = MapperHelper.modelMapper().map(order, OrderDTO.class);
+                dto.add(orderDTO);
+            }
+        }
+
+        return dto;
+    }
+
 }

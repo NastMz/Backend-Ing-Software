@@ -64,11 +64,17 @@ public class OrderController {
         return ResponseEntity.ok("The order was successfully deleted");
     }
 
+    @GetMapping(value = "/list/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> findAllByUserId(@PathVariable("userId") String userId) {
+        return ResponseEntity.ok(this.orderService.findAllByUserId(userId));
+    }
+
+
     private ResponseEntity<Object> fallBackSave(@RequestBody OrderRequest orderRequest, RuntimeException e) {
         return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 
-    private ResponseEntity<Object> fallBackSave(@PathVariable("orderNumber") Long orderNumber, @RequestBody OrderRequest orderRequest, RuntimeException e) {
+    private ResponseEntity<Object> fallBackUpdate(@PathVariable("orderNumber") Long orderNumber, @RequestBody OrderRequest orderRequest, RuntimeException e) {
         return ResponseEntity.ok("The request was not possible, sorry for the inconvenience. We are working to fix the problem\n" + e);
     }
 }

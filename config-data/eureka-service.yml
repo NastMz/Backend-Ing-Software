@@ -2,7 +2,7 @@ server:
     error:
         include-message: always
         include-stacktrace: never
-    port: 8761
+    port: 8060
 eureka:
     instance : 
         hostname : localhost

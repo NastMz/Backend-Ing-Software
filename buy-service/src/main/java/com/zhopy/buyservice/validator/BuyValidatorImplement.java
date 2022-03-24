@@ -43,6 +43,10 @@ public class BuyValidatorImplement implements IBuyValidator {
             this.message422("Total cannot be less than 0");
         }
 
+        if (request.getUserId() == null || StringUtils.isBlank(request.getUserId())) {
+            this.message422("The user document cannot be empty");
+        }
+
         if (!buyService.existsByUserId(request.getUserId())) {
             this.message422("The user document does not exist");
         }

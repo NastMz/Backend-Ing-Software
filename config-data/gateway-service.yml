@@ -121,5 +121,3 @@ spring:
           uri: lb://payment-service
           predicates:
             - Path=/api/payment/**
-          filters:
-            - AuthFilter
